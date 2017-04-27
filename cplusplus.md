@@ -5,9 +5,7 @@
 
 unstable 
 
-<font color=green>
 examples:
-</font>
 
     std::sort (myvector.begin(), myvector.begin()+4);
 
@@ -20,9 +18,7 @@ examples:
 
 >int stoi (const string&  str, size_t* idx = 0, int base = 10);
 
-<font color=green>
 examples:
-</font>
 
     stoi ("0x7f",nullptr,0); //127
     
@@ -33,9 +29,7 @@ member: push,pop,top,size
 #### make_pair
 >pair<V1,V2> make_pair (T1&& x, T2&& y);
 
-<font color=green>
 examples:
-</font>
 
     std::pair <int,int> foo;
     foo = std::make_pair (10,20);
