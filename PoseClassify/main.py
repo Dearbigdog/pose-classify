@@ -1,95 +1,95 @@
 import numpy as np
-import cv2
-import sys
-from pylibfreenect2 import Freenect2, SyncMultiFrameListener
-from pylibfreenect2 import FrameType, Registration, Frame
-from pylibfreenect2 import createConsoleLogger, setGlobalLogger
-from pylibfreenect2 import LoggerLevel
+import tensorflow as tf
+from tensorflow.contrib.learn.python.learn import estimators
+import tensorflow.contrib.layers as tfl
 
-try:
-    from pylibfreenect2 import OpenCLPacketPipeline
-    pipeline = OpenCLPacketPipeline()
-except:
-    try:
-        from pylibfreenect2 import OpenGLPacketPipeline
-        pipeline = OpenGLPacketPipeline()
-    except:
-        from pylibfreenect2 import CpuPacketPipeline
-        pipeline = CpuPacketPipeline()
-print("Packet pipeline:", type(pipeline).__name__)
+def loadData(fname):
+    ''' load the file using std open'''
+    f = open(fname,'r')
+    data = []
+    for line in f.readlines():
+        data.append(line.replace('\n','').split(' '))
+    f.close()
+    return data
 
-# Create and set logger
-logger = createConsoleLogger(LoggerLevel.Debug)
-setGlobalLogger(logger)
+#load correct pose
+data = loadData('./kinect_data/chestap.txt')
 
-fn = Freenect2()
-num_devices = fn.enumerateDevices()
-if num_devices == 0:
-    print("No device connected!")
-    sys.exit(1)
+posNum=len(data)/25
+posX=[]
+posSet=np.zeros((25,3))
+for j in xrange(0,posNum):
+    for i in xrange(0,25):
+        #data[0][1][2:-1]
+        posSet[i]=np.array([float(data[i][1][2:-1]),float(data[i][2][2:-1]),float(data[i][3][2:-1])])
+    posX.append(posSet.ravel())
+posX=np.array(posX)
+posY=np.array([[1,0] for x in range(len(posX))])
 
-serial = fn.getDeviceSerialNumber(0)
-device = fn.openDevice(serial, pipeline=pipeline)
+#load wrong pose
+data = loadData('./kinect_data/chestapWrong.txt')
 
-listener = SyncMultiFrameListener(
-    FrameType.Color | FrameType.Ir | FrameType.Depth)
+negNum=len(data)/25
+negX=[]
+negSet=np.zeros((25,3))
 
-# Register listeners
-device.setColorFrameListener(listener)
-device.setIrAndDepthFrameListener(listener)
+for j in xrange(0,negNum):
+    for i in xrange(0,25):
+        #data[0][1][2:-1]
+        negSet[i]=[float(data[i][1][2:-1]),float(data[i][2][2:-1]),float(data[i][3][2:-1])]
+    negX.append(negSet.ravel())
+negX = np.array(negX)
+negY=np.array([[0,1] for x in range(len(negX))])
 
-device.start()
+trainx=np.concatenate((posX,negX),axis=0)
+trainy=np.concatenate((posY,negY),axis=0)
 
-# NOTE: must be called after device.start()
-registration = Registration(device.getIrCameraParams(),
-                            device.getColorCameraParams())
+sess=tf.InteractiveSession()
+x=tf.placeholder(tf.float32,[None,75])
+W=tf.Variable(tf.zeros([75,2]),name="joints")
+b=tf.Variable(tf.zeros([2]),name="jonitBias")
+y=tf.nn.softmax(tf.matmul(x,W)+b)
+y_=tf.placeholder(tf.float32,[None,2])
+crossEntropyLoss=tf.reduce_mean(-tf.reduce_sum(y_*tf.log(y),reduction_indices=[1]))
+optimizer=tf.train.GradientDescentOptimizer(0.5)
+train=optimizer.minimize(crossEntropyLoss)
+tf.global_variables_initializer().run()
 
-undistorted = Frame(512, 424, 4)
-registered = Frame(512, 424, 4)
+sess.run(train,{x:trainx,y_:trainy})
 
-# Optinal parameters for registration
-# set True if you need
-need_bigdepth = True
-need_color_depth_map = True
+# evaluate training accuracy
+curr_W, curr_b, curr_loss = sess.run([W, b, crossEntropyLoss], {x: trainx, y_: trainy})
+print("W: %s b: %s loss: %s"%(curr_W, curr_b, curr_loss))
+testx=np.reshape(trainx[15],(1,75))
+yPredict=np.matmul(testx,sess.run(W))+sess.run(b)
+print yPredict
 
-bigdepth = Frame(1920, 1082, 4) if need_bigdepth else None
-color_depth_map = np.zeros((424, 512),  np.int32).ravel() \
-    if need_color_depth_map else None
 
-while True:
-    frames = listener.waitForNewFrame()
 
-    color = frames["color"]
-    ir = frames["ir"]
-    depth = frames["depth"]
 
-    registration.apply(color, depth, undistorted, registered,
-                       bigdepth=bigdepth,
-                       color_depth_map=color_depth_map)
 
-    # NOTE for visualization:
-    # cv2.imshow without OpenGL backend seems to be quite slow to draw all
-    # things below. Try commenting out some imshow if you don't have a fast
-    # visualization backend.
-    cv2.imshow("ir", ir.asarray() / 65535.)
-    cv2.imshow("depth", depth.asarray() / 4500.)
-    cv2.imshow("color", cv2.resize(color.asarray(),
-                                   (int(1920 / 3), int(1080 / 3))))
-    cv2.imshow("registered", registered.asarray(np.uint8))
 
-    if need_bigdepth:
-        cv2.imshow("bigdepth", cv2.resize(bigdepth.asarray(np.float32),
-                                          (int(1920 / 3), int(1082 / 3))))
-    if need_color_depth_map:
-        cv2.imshow("color_depth_map", color_depth_map.reshape(424, 512))
 
-    listener.release(frames)
 
-    key = cv2.waitKey(delay=1)
-    if key == ord('q'):
-        break
 
-device.stop()
-device.close()
 
-sys.exit(0)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
