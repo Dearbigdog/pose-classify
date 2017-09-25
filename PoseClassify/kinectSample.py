@@ -5,6 +5,17 @@ from pylibfreenect2 import Freenect2, SyncMultiFrameListener
 from pylibfreenect2 import FrameType, Registration, Frame
 from pylibfreenect2 import createConsoleLogger, setGlobalLogger
 from pylibfreenect2 import LoggerLevel
+from datetime import datetime
+
+startSaving=False
+
+
+# mouse callback function
+def draw_circle(event,x,y,flags,param):
+    global startSaving
+    if event == cv2.EVENT_LBUTTONDOWN:
+        startSaving= True if startSaving==False else False
+        print 'mouse down,set startSaving=',startSaving
 
 try:
     from pylibfreenect2 import OpenCLPacketPipeline
@@ -56,12 +67,32 @@ bigdepth = Frame(1920, 1082, 4) if need_bigdepth else None
 color_depth_map = np.zeros((424, 512),  np.int32).ravel() \
     if need_color_depth_map else None
 
+cv2.namedWindow('ir')
+cv2.setMouseCallback('ir',draw_circle)
+
 while True:
     frames = listener.waitForNewFrame()
 
     color = frames["color"]
     ir = frames["ir"]
     depth = frames["depth"]
+
+    if startSaving==True:
+        timestamp=str(datetime.now())
+        print 'on saving... \ntimestamp=',timestamp
+        #save color
+        with open('color'+timestamp, 'wb') as f1:
+            f1.write(color.asarray())
+            f1.close()
+        #save ir
+        with open('ir'+timestamp, 'wb') as f2:
+            f2.write(ir.asarray())
+            f2.close()
+        #save depth
+        with open('depth'+timestamp, 'wb') as f3:
+            f3.write(depth.asarray())
+            f3.close()
+        print 'saving finished...\ntimestamp=',timestamp
 
     registration.apply(color, depth, undistorted, registered,
                        bigdepth=bigdepth,
