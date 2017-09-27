@@ -1,4 +1,5 @@
 import numpy as np
+import os
+print os.getppid()
 
-path=''
-
+print os.getppid()
