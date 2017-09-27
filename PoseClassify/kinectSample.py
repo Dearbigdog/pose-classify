@@ -81,15 +81,15 @@ while True:
         timestamp=str(datetime.now())
         print 'on saving... \ntimestamp=',timestamp
         #save color
-        with open('color'+timestamp, 'wb') as f1:
+        with open('hand_wrong_color_'+timestamp, 'wb') as f1:
             f1.write(color.asarray())
             f1.close()
         #save ir
-        with open('ir'+timestamp, 'wb') as f2:
+        with open('hand_wrong_ir_'+timestamp, 'wb') as f2:
             f2.write(ir.asarray())
             f2.close()
         #save depth
-        with open('depth'+timestamp, 'wb') as f3:
+        with open('hand_wrong_depth_'+timestamp, 'wb') as f3:
             f3.write(depth.asarray())
             f3.close()
         print 'saving finished...\ntimestamp=',timestamp

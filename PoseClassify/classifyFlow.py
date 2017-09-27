@@ -17,7 +17,7 @@ def loadData(fname):
 
 
 # load correct pose
-data = loadData('./kinect_data/chestap.txt')
+data = loadData('./kinect_data/jointPos_Richard_Pos.txt')
 
 posNum = len(data) / 25
 posX = []
