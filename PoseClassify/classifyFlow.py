@@ -166,10 +166,8 @@ nPhi = utils.extmath.vAngle(nProj, r)
 print 'neck phi=', nPhi
 ff.append([nTheta, nPhi])
 
-print 'ff=\n', ff
-
 # second degree joints
-sf = []
+
 vHandLeft = posX[0][6] - posX[0][5]
 vHandRight = posX[0][10] - posX[0][9]
 vAnkleLeft = posX[0][14] - posX[0][13]
@@ -182,7 +180,7 @@ rProj = utils.extmath.planeProject(r, vElbowLeft)
 vhandLProj = utils.extmath.planeProject(vHandLeft, vElbowLeft)
 hPhiL = utils.extmath.vAngle(rProj, vhandLProj)
 print 'left hand phi=', hPhiL
-sf.append([hThetaL, hPhiL])
+ff.append([hThetaL, hPhiL])
 
 hThetaR = utils.extmath.vAngle(vElbowRight, vHandRight)
 print 'right hand theta=', hThetaR
@@ -190,7 +188,7 @@ rProj = utils.extmath.planeProject(r, vElbowRight)
 vhandRProj = utils.extmath.planeProject(vHandRight, vElbowRight)
 hPhiR = utils.extmath.vAngle(rProj, vhandRProj)
 print 'right hand phi=', hPhiR
-sf.append([hThetaR, hPhiR])
+ff.append([hThetaR, hPhiR])
 
 # ankle left & right
 aThetaL = utils.extmath.vAngle(vKneeLeft, vAnkleLeft)
@@ -199,7 +197,7 @@ rProj = utils.extmath.planeProject(r, vKneeLeft)
 vAnkleLProj = utils.extmath.planeProject(vAnkleLeft, vKneeLeft)
 aPhiL = utils.extmath.vAngle(rProj, vAnkleLProj)
 print 'left ankle phi=', aPhiL
-sf.append([aThetaL, aPhiL])
+ff.append([aThetaL, aPhiL])
 
 aThetaR = utils.extmath.vAngle(vKneeRight, vAnkelRight)
 print 'right ankle theta=', aThetaR
@@ -207,10 +205,11 @@ rProj = utils.extmath.planeProject(r, vKneeRight)
 vAnkleRProj = utils.extmath.planeProject(vAnkelRight, vKneeRight)
 aPhiR = utils.extmath.vAngle(rProj, vAnkleRProj)
 print 'right ankle phi=', aPhiR
-sf.append([aThetaR, aPhiR])
+ff.append([aThetaR, aPhiR])
 
-print 'sf=\n', sf
-
+print 'ff=\n', ff
+ff=np.array(ff)
+print ff.shape
 # fig = plt.figure()
 # ax = Axes3D(fig)
 # for jj in dfMat:
