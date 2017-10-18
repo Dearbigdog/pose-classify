@@ -17,87 +17,115 @@ import sys
 
 '''
 generate the features and store them instead of calculate every time
-'''
-def gen_feature_file(features_file, source_file):
-    features = []
-    # determine whether we need to generate the files
-    if not os.path.isfile(features_file):
-        outfile = open(features_file, 'ab')
-        # load pos data and convert them to theta and phi
-        for p in source_file:
-            print 'loading... path=', p
-            pos_data = modules.load_data(p)
-            data_x, torsos = modules.get_torso(pos_data)
 
-            for i in range(0, torsos.shape[0]):
-                print 'total torso= {0},executing torso:{1}'.format(torsos.shape[0], i)
-                u, r, t = modules.get_torso_pca(torsos[i])
-                f = modules.export_features(data_x[i], u, r, t)
-                #flatten the feature data
-                features.append(np.reshape(f,(18,)))
+'''
+feature_dim=18
+def gen_feature_file(features_file,data_file, source_file):
+    '''
+    :param features_file: the extracted feature files
+    :param source_file: original data input
+    :return: the extracted feature
+    '''
+    features = []
+    data=[]
+    # determine whether we need to generate the files
+    if not os.path.exists(features_file):
+        outfile = open(features_file, 'ab')
+        outdata=open(data_file, 'ab')
+        # load pos data and convert them to theta and phi
+        print 'loading... path=', source_file
+        pos_data = modules.load_data(source_file)
+        data_x, torsos = modules.get_torso(pos_data)
+
+        for i in range(0, torsos.shape[0]):
+            print 'total torso= {0},executing torso:{1}'.format(torsos.shape[0], i)
+            u, r, t = modules.get_torso_pca(torsos[i])
+            f = modules.export_features(data_x[i], u, r, t)
+            #flatten the feature data
+            features.append(np.reshape(f,(feature_dim,)))
 
         features = np.array(features)
+        data_x=np.array(data_x)
         print features.shape
         np.save(outfile, features)
         outfile.close()
+        np.save(outdata, data_x)
+        outdata.close()
         print 'finished...'
     else:
         print 'loading features...',features_file
         outfile = open(features_file, 'rb')
         features = np.load(outfile)
         outfile.close()
+        
+        print 'loading data...',data_file
+        outdata = open(data_file, 'rb')
+        data = np.load(outdata)
+        outdata.close()
         #print features.shape
-    return features
+    return features,data
 
-feature_pos_file='f_pos.txt'
-data_pos_files=['./kinect_data/jointPos_Richard_Pos.txt','./kinect_data/jointPos_Dexter_Pos.txt','./kinect_data/jointPos_Jay_Pos.txt']
-#data_pos_files=['./kinect_data/jointPos_Richard_Pos.txt']
-feature_neg_file='f_neg.txt'
-data_neg_files=['./kinect_data/jointPos_Richard_Neg.txt','./kinect_data/jointPos_Dexter_Neg.txt','./kinect_data/jointPos_Jay_Neg.txt']
-#data_neg_files=['./kinect_data/jointPos_Richard_Neg.txt']
+case='chest'
 
-data_pos=gen_feature_file(feature_pos_file,data_pos_files)
-data_neg=gen_feature_file(feature_neg_file,data_neg_files)
+feature_pos_file='f_'+case+'_pos.txt'
+data_pos_file='data_'+case+'_pos.txt'
+data_pos_files='./kinect_data/'+case+'/pos'
+
+feature_neg_file='f_'+case+'_neg.txt'
+data_neg_file='data_'+case+'_neg.txt'
+data_neg_files='./kinect_data/'+case+'/neg'
+
+
+feature_pos,data_pos=gen_feature_file(feature_pos_file,data_pos_file,data_pos_files)
+feature_neg,data_neg=gen_feature_file(feature_neg_file,data_neg_file,data_neg_files)
 
 #create the y data
-y_pos=np.array([[1,0] for i in range(data_pos.shape[0])])
-y_neg=np.array([[0,1] for j in range(data_neg.shape[0])])
+y_pos=np.array([[1,0] for i in range(feature_pos.shape[0])])
+y_neg=np.array([[0,1] for j in range(feature_neg.shape[0])])
 
-full_x=np.concatenate((data_pos,data_neg),axis=0)
-full_y=np.concatenate((y_pos,y_neg),axis=0)
+
+data_full_x=np.concatenate((data_pos,data_neg),axis=0)
+feature_full_x=np.concatenate((feature_pos,feature_neg),axis=0)
+feature_full_y=np.concatenate((y_pos,y_neg),axis=0)
 
 # Shuffle data
-shuffle_indices = np.random.permutation(np.arange(len(full_x)))
-full_x = full_x[shuffle_indices]
-full_y = full_y[shuffle_indices]
+shuffle_indices = np.random.permutation(np.arange(len(feature_full_x)))
+shuffle_x = feature_full_x[shuffle_indices]
+shuffle_y = feature_full_y[shuffle_indices]
+shuffle_data=data_full_x[shuffle_indices]
 
-test_x=full_x[0:200]
-test_y=full_y[0:200]
+testing_size=100
 
-data_x=full_x[201:-1]
-data_y=full_y[201:-1]
+test_x=shuffle_x[0:testing_size]
+test_y=shuffle_y[0:testing_size]
+
+#in order to trace the original inputs
+test_x_data=shuffle_data[0:testing_size]
+
+data_x=shuffle_x[testing_size+1:-1]
+data_y=shuffle_y[testing_size+1:-1]
 
 
 
 # parameters
 learning_rate = 0.05
-num_steps = 100  #not use any more
-batch_size = 50
-display_step = 1
+#num_steps = 100  #not use any more
+batch_size = 30
+display_step = 10
 
 print 'total training case number is {0}, total testing case is {1}'.format(len(data_x),len(test_x))
 print 'learning rate is {0}, mini batch size is {1}'.format(learning_rate,batch_size)
 
 # Network Parameters
 n_hidden_1 = 10 # 1st layer number of neurons
-n_hidden_2 = 10 # 2nd layer number of neurons
-num_input = 18 # MNIST data input (img shape: 28*28)
-num_classes = 2 # MNIST total classes (0-9 digits)
+n_hidden_2 = 6 # 2nd layer number of neurons
+num_input = feature_dim #  data input
+num_classes = 2 #  total classes
 
 X = tf.placeholder("float", [None, num_input])
 Y = tf.placeholder("float", [None, num_classes])
 
-# Store layers weight & bias
+# Store layers weight & bias1
 weights = {
     'h1': tf.Variable(tf.random_normal([num_input, n_hidden_1])),
     'h2': tf.Variable(tf.random_normal([n_hidden_1, n_hidden_2])),
@@ -152,27 +180,48 @@ def batch_data(source, target, batch_size):
 # Start training
 
 #mini batch generator
-batch_generator = batch_data(data_x,data_y,batch_size)
+statistics_accuracy=[]
+for i in xrange(0,1):
+    batch_generator = batch_data(data_x,data_y,batch_size)
 
-with tf.Session() as sess:
-    # Run the initializer
-    sess.run(init)
+    with tf.Session() as sess:
+        # Run the initializer
+        sess.run(init)
 
-    for step in range(0,len(data_y)//batch_size):
-        batch_x, batch_y = batch_generator.next()
-        # Run optimization op (backprop)
-        sess.run(train_op, feed_dict={X: batch_x, Y: batch_y})
-        if step % display_step == 0 or step == 1:
-            # Calculate batch loss and accuracy
-            loss, acc = sess.run([loss_op, accuracy], feed_dict={X: batch_x,
-                                                                 Y: batch_y})
-            print("Step " + str(step) + ", Minibatch Loss= " +
-                  "{:.4f}".format(loss) + ", Training Accuracy= " +
-                  "{:.3f}".format(acc))
+        for step in range(0,len(data_y)//batch_size):
+            batch_x, batch_y = batch_generator.next()
+            # Run optimization op (backprop)
+            sess.run(train_op, feed_dict={X: batch_x, Y: batch_y})
+            if step % display_step == 0 or step == 1:
+                # Calculate batch loss and accuracy
+                loss, acc = sess.run([loss_op, accuracy], feed_dict={X: batch_x,
+                                                                     Y: batch_y})
+        #         print("Step " + str(step) + ", Minibatch Loss= " +
+        #               "{:.4f}".format(loss) + ", Training Accuracy= " +
+        #               "{:.3f}".format(acc))
+        # print("Optimization Finished!")
 
-    print("Optimization Finished!")
+        # Calculate accuracy for MNIST test images
+        statistics_accuracy.append(100*sess.run(accuracy, feed_dict={X:test_x,
+                                          Y: test_y}))
+        print("Testing Accuracy:",statistics_accuracy[i])
 
-    # Calculate accuracy for MNIST test images
-    print("Testing Accuracy:",
-        sess.run(accuracy, feed_dict={X:test_x,
-                                      Y: test_y}))
+        test_accuracy,test_correct_pred=sess.run([accuracy,correct_pred], feed_dict={X:test_x,
+                                          Y: test_y})
+
+        #test_x_data
+
+        # fig = plt.figure()
+        # ax = Axes3D(fig)
+        # for jj in dfMat:
+        #     ax.scatter(jj[0],jj[1],jj[2],color='b')
+        # plt.draw()
+
+#
+# outfile = open('statistics_accuracy_18.txt', 'ab')
+# np.save(outfile, statistics_accuracy)
+# outfile.close()
+
+
+
+

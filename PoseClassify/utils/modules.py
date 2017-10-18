@@ -1,17 +1,39 @@
 import numpy as np
 import tensorflow as tf
 import utils.extmath
+import os
+import time
+
+
+def timeit(method):
+    def timed(*args, **kw):
+        ts = time.time()
+        result = method(*args, **kw)
+        te = time.time()
+        if 'log_time' in kw:
+            name = kw.get('log_name', method.__name__.upper())
+            kw['log_time'][name] = int((te - ts) * 1000)
+        else:
+            print '%r  %2.2f ms' % \
+                  (method.__name__, (te - ts) * 1000)
+        return result
+
+    return timed
+
 
 def load_data(fpath):
     '''
     :param fname: load the data at 'fpath'
     :return:
     '''
-    f = open(fpath, 'r')
     data = []
-    for line in f.readlines():
-        data.append(line.replace('\n', '').split(' '))
-    f.close()
+    for dirpath, subdirs, files in os.walk(fpath):
+        for x in files:
+            if x.endswith('.txt'):
+                with open(os.path.join(dirpath, x), 'r') as f:
+                    for line in f.readlines():
+                        data.append(line.replace('\n', '').split(' '))
+                    f.close()
     return data
 
 
@@ -22,32 +44,38 @@ def get_torso(data):
     '''
     dataNum = len(data) / 25
     dataX = []
-    dataSet = np.zeros((25, 3))
+
     for j in xrange(0, dataNum):
+        dataSet = np.zeros((25, 3))
         for i in xrange(0, 25):
             # data[0][1][2:-1]
-            dataSet[i] = np.array([float(data[i][1][2:-1]), float(data[i][2][2:-1]), float(data[i][3][2:-1])])
+            dataSet[i] = np.array([float(data[i+j*25][1][2:-1]), float(data[i+j*25][2][2:-1]), float(data[i+j*25][3][2:-1])])
         dataX.append(dataSet)
     dataX = np.array(dataX)
-    #dataY = np.array([[1, 0] for x in range(len(dataX))])
+    # dataY = np.array([[1, 0] for x in range(len(dataX))])
 
     # get torso 7 points
     torsoIndices = [8, 20, 4, 1, 16, 0, 12]
     torsoMat = []
-    torsoSet=[]
+    torsoSet = []
     for j in range(len(dataX)):
         for i in torsoIndices:
             torsoMat.append(dataX[j][i])
         torsoSet.append(torsoMat)
-        torsoMat=[]
+        torsoMat = []
     torsoSet = np.array(torsoSet)
     # print 'torsoMatrix shape=', torsoSet.shape
-    return dataX,torsoSet
+    return dataX, torsoSet
+
 
 # get u v r from torso mat
-def get_torso_pca(torsoMat,factors=2):
+#@timeit
+def get_torso_pca(torsoMat, factors=2):
     # tensorflow
-    with tf.Session() as sess:
+    config = tf.ConfigProto()
+    config.intra_op_parallelism_threads = 44
+    config.inter_op_parallelism_threads = 44
+    with tf.Session(config=config) as sess:
         # SVD
         # Center the points
         torsoPca = torsoMat - np.mean(torsoMat, axis=0)
@@ -65,7 +93,7 @@ def get_torso_pca(torsoMat,factors=2):
         # print 'Vk=\n', sess.run(Vk)
 
         # Compute user average rating
-        torsoNew = sess.run(tf.matmul(torsoPca, Vk))
+        #torsoNew = sess.run(tf.matmul(torsoPca, Vk))
         # print 'torso new.shape', torsoNew.shape
 
         u = sess.run(Vk)[:, 0]
@@ -79,13 +107,15 @@ def get_torso_pca(torsoMat,factors=2):
 
         # t = u X r
         t = np.cross(u, r)
-
+        sess.close()
         # print 'u=', u
         # print 'r=', r
         # print 't=', t
-    return u,r,t
+    tf.reset_default_graph()
+    return u, r, t
 
-def export_features(posSet,u,r,t):
+#@timeit
+def export_features(posSet, u, r, t):
     '''
     :param posSet: joint maps
     :param u: pca u
