@@ -19,7 +19,7 @@ import sys
 generate the features and store them instead of calculate every time
 
 '''
-feature_dim=18
+feature_dim=30
 def gen_feature_file(features_file,data_file, source_file):
     '''
     :param features_file: the extracted feature files
@@ -108,7 +108,7 @@ data_y=shuffle_y[testing_size+1:-1]
 
 
 # parameters
-learning_rate = 0.05
+learning_rate = 0.04
 #num_steps = 100  #not use any more
 batch_size = 30
 display_step = 10
@@ -117,8 +117,8 @@ print 'total training case number is {0}, total testing case is {1}'.format(len(
 print 'learning rate is {0}, mini batch size is {1}'.format(learning_rate,batch_size)
 
 # Network Parameters
-n_hidden_1 = 10 # 1st layer number of neurons
-n_hidden_2 = 6 # 2nd layer number of neurons
+n_hidden_1 = 15 # 1st layer number of neurons
+n_hidden_2 = 10 # 2nd layer number of neurons
 num_input = feature_dim #  data input
 num_classes = 2 #  total classes
 
@@ -181,7 +181,7 @@ def batch_data(source, target, batch_size):
 
 #mini batch generator
 statistics_accuracy=[]
-for i in xrange(0,1):
+for i in xrange(0,200):
     batch_generator = batch_data(data_x,data_y,batch_size)
 
     with tf.Session() as sess:
@@ -210,27 +210,27 @@ for i in xrange(0,1):
                                           Y: test_y})
 
 
-        outfile = open('test_x_data.txt', 'ab')
-        np.save(outfile, test_x_data)
-        outfile.close()
-
-        outfile = open('test_x.txt', 'ab')
-        np.save(outfile, test_x)
-        outfile.close()
-
-        outfile = open('test_y.txt', 'ab')
-        np.save(outfile, test_y)
-        outfile.close()
-
-        outfile = open('test_correct_pred.txt', 'ab')
-        np.save(outfile, test_correct_pred)
-        outfile.close()
+        # outfile = open('test_x_data.txt', 'ab')
+        # np.save(outfile, test_x_data)
+        # outfile.close()
+        #
+        # outfile = open('test_x.txt', 'ab')
+        # np.save(outfile, test_x)
+        # outfile.close()
+        #
+        # outfile = open('test_y.txt', 'ab')
+        # np.save(outfile, test_y)
+        # outfile.close()
+        #
+        # outfile = open('test_correct_pred.txt', 'ab')
+        # np.save(outfile, test_correct_pred)
+        # outfile.close()
 
 
 #
-# outfile = open('statistics_accuracy_18.txt', 'ab')
-# np.save(outfile, statistics_accuracy)
-# outfile.close()
+outfile = open('statistics_accuracy_30.txt', 'ab')
+np.save(outfile, statistics_accuracy)
+outfile.close()
 
 
 

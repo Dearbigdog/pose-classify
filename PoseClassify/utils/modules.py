@@ -6,211 +6,245 @@ import time
 
 
 def timeit(method):
-    def timed(*args, **kw):
-        ts = time.time()
-        result = method(*args, **kw)
-        te = time.time()
-        if 'log_time' in kw:
-            name = kw.get('log_name', method.__name__.upper())
-            kw['log_time'][name] = int((te - ts) * 1000)
-        else:
-            print '%r  %2.2f ms' % \
-                  (method.__name__, (te - ts) * 1000)
-        return result
+	def timed(*args, **kw):
+		ts = time.time()
+		result = method(*args, **kw)
+		te = time.time()
+		if 'log_time' in kw:
+			name = kw.get('log_name', method.__name__.upper())
+			kw['log_time'][name] = int((te - ts) * 1000)
+		else:
+			print '%r  %2.2f ms' % \
+			      (method.__name__, (te - ts) * 1000)
+		return result
 
-    return timed
+	return timed
 
 
 def load_data(fpath):
-    '''
-    :param fname: load the data at 'fpath'
-    :return:
-    '''
-    data = []
-    for dirpath, subdirs, files in os.walk(fpath):
-        for x in files:
-            if x.endswith('.txt'):
-                with open(os.path.join(dirpath, x), 'r') as f:
-                    for line in f.readlines():
-                        data.append(line.replace('\n', '').split(' '))
-                    f.close()
-    return data
+	'''
+	:param fname: load the data at 'fpath'
+	:return:
+	'''
+	data = []
+	for dirpath, subdirs, files in os.walk(fpath):
+		for x in files:
+			if x.endswith('.txt'):
+				with open(os.path.join(dirpath, x), 'r') as f:
+					for line in f.readlines():
+						data.append(line.replace('\n', '').split(' '))
+					f.close()
+	return data
 
 
 def get_torso(data):
-    '''
-    :param data: n sets of skeleton data (25 points per set)
-    :return: 25 points data set. torso matrix
-    '''
-    dataNum = len(data) / 25
-    dataX = []
+	'''
+	:param data: n sets of skeleton data (25 points per set)
+	:return: 25 points data set. torso matrix
+	'''
+	dataNum = len(data) / 25
+	dataX = []
 
-    for j in xrange(0, dataNum):
-        dataSet = np.zeros((25, 3))
-        for i in xrange(0, 25):
-            # data[0][1][2:-1]
-            dataSet[i] = np.array([float(data[i+j*25][1][2:-1]), float(data[i+j*25][2][2:-1]), float(data[i+j*25][3][2:-1])])
-        dataX.append(dataSet)
-    dataX = np.array(dataX)
-    # dataY = np.array([[1, 0] for x in range(len(dataX))])
+	for j in xrange(0, dataNum):
+		dataSet = np.zeros((25, 3))
+		for i in xrange(0, 25):
+			# data[0][1][2:-1]
+			dataSet[i] = np.array(
+				[float(data[i + j * 25][1][2:-1]), float(data[i + j * 25][2][2:-1]), float(data[i + j * 25][3][2:-1])])
+		dataX.append(dataSet)
+	dataX = np.array(dataX)
+	# dataY = np.array([[1, 0] for x in range(len(dataX))])
 
-    # get torso 7 points
-    torsoIndices = [8, 20, 4, 1, 16, 0, 12]
-    torsoMat = []
-    torsoSet = []
-    for j in range(len(dataX)):
-        for i in torsoIndices:
-            torsoMat.append(dataX[j][i])
-        torsoSet.append(torsoMat)
-        torsoMat = []
-    torsoSet = np.array(torsoSet)
-    # print 'torsoMatrix shape=', torsoSet.shape
-    return dataX, torsoSet
+	# get torso 7 points
+	torsoIndices = [8, 20, 4, 1, 16, 0, 12]
+	torsoMat = []
+	torsoSet = []
+	for j in range(len(dataX)):
+		for i in torsoIndices:
+			torsoMat.append(dataX[j][i])
+		torsoSet.append(torsoMat)
+		torsoMat = []
+	torsoSet = np.array(torsoSet)
+	# print 'torsoMatrix shape=', torsoSet.shape
+	return dataX, torsoSet
 
 
 # get u v r from torso mat
-#@timeit
+# @timeit
 def get_torso_pca(torsoMat, factors=2):
-    # tensorflow
-    config = tf.ConfigProto()
-    config.intra_op_parallelism_threads = 44
-    config.inter_op_parallelism_threads = 44
-    with tf.Session(config=config) as sess:
-        # SVD
-        # Center the points
-        torsoPca = torsoMat - np.mean(torsoMat, axis=0)
-        # torsoPca=np.matmul(torsoPca,np.transpose(torsoPca))
-        St, Ut, Vt = tf.svd(torsoPca, full_matrices=False)
-        # print 'Ut=\n', sess.run(Ut)
-        # print 'St=\n', sess.run(St)
-        # print 'Vt=\n', sess.run(Vt)
+	# tensorflow
+	config = tf.ConfigProto()
+	config.intra_op_parallelism_threads = 44
+	config.inter_op_parallelism_threads = 44
+	with tf.Session(config=config) as sess:
+		# SVD
+		# Center the points
+		torsoPca = torsoMat - np.mean(torsoMat, axis=0)
+		# torsoPca=np.matmul(torsoPca,np.transpose(torsoPca))
+		St, Ut, Vt = tf.svd(torsoPca, full_matrices=False)
+		# print 'Ut=\n', sess.run(Ut)
+		# print 'St=\n', sess.run(St)
+		# print 'Vt=\n', sess.run(Vt)
 
-        # Compute reduced matrices
-        Sk = tf.diag(St)[0:factors, 0:factors]
-        Vk = Vt[:, 0:factors]
-        Uk = Ut[0:factors, :]
+		# Compute reduced matrices
+		Sk = tf.diag(St)[0:factors, 0:factors]
+		Vk = Vt[:, 0:factors]
+		Uk = Ut[0:factors, :]
 
-        # print 'Vk=\n', sess.run(Vk)
+		# print 'Vk=\n', sess.run(Vk)
 
-        # Compute user average rating
-        #torsoNew = sess.run(tf.matmul(torsoPca, Vk))
-        # print 'torso new.shape', torsoNew.shape
+		# Compute user average rating
+		# torsoNew = sess.run(tf.matmul(torsoPca, Vk))
+		# print 'torso new.shape', torsoNew.shape
 
-        u = sess.run(Vk)[:, 0]
-        r = sess.run(Vk)[:, 1]
+		u = sess.run(Vk)[:, 0]
+		r = sess.run(Vk)[:, 1]
 
-        # u top-down
-        max_abs_cols = np.argmax(np.abs(u))
-        signs = np.sign(u[max_abs_cols])
-        u *= -signs
-        # r left right
+		# u top-down
+		max_abs_cols = np.argmax(np.abs(u))
+		signs = np.sign(u[max_abs_cols])
+		u *= -signs
+		# r left right
 
-        # t = u X r
-        t = np.cross(u, r)
-        sess.close()
-        # print 'u=', u
-        # print 'r=', r
-        # print 't=', t
-    tf.reset_default_graph()
-    return u, r, t
+		# t = u X r
+		t = np.cross(u, r)
+		sess.close()
+		# print 'u=', u
+		# print 'r=', r
+		# print 't=', t
+	tf.reset_default_graph()
+	return u, r, t
 
-#@timeit
-def export_features(posSet, u, r, t):
-    '''
-    :param posSet: joint maps
-    :param u: pca u
-    :param r: pca r
-    :param t: pca t
-    :return: angles along the first and second degree joints
-    '''
-    # first degree joints
-    ff = []
 
-    vElbowLeft = posSet[5] - posSet[4]
-    vElbowRight = posSet[9] - posSet[8]
-    vKneeLeft = posSet[13] - posSet[12]
-    vKneeRight = posSet[17] - posSet[16]
-    vNeck = posSet[2] - posSet[20]
+def gen_theta_phi(v,u,r):
+	theta= utils.extmath.vector_angle(u, v)
+	proj=utils.extmath.plane_proj(v, u)
+	phi = utils.extmath.vector_angle(proj, r)
+	return theta, phi
 
-    # elbow left & right
-    eThetaL = utils.extmath.vAngle(u, vElbowLeft)
-    # print 'left elbow theta=', eThetaL
-    eProjL = utils.extmath.planeProject(vElbowLeft, u)
-    ePhiL = utils.extmath.vAngle(eProjL, r)
-    # print 'left elbow phi=', ePhiL
-    ff.append([eThetaL, ePhiL])
+# @timeit
+def export_features(pose_set, u, r, t):
+	'''
+	:param pose_set: joint maps
+	:param u: pca u top-down
+	:param r: pca r left-right
+	:param t: pca t uXr
+	:return: angles along the first and second degree joints
+	'''
+	ff = []
+	# zero degree joints
+	shoudler_left = pose_set[4] - pose_set[20]
+	shoudler_right = pose_set[8] - pose_set[20]
+	hip_left = pose_set[12] - pose_set[0]
+	hip_right = pose_set[16] - pose_set[0]
+	spine_upper = pose_set[20] - pose_set[1]
+	spine_lower = pose_set[0] - pose_set[1]
 
-    eThetaR = utils.extmath.vAngle(u, vElbowRight)
-    # print 'right elbow theta=', eThetaR
-    eProjR = utils.extmath.planeProject(vElbowRight, u)
-    ePhiR = utils.extmath.vAngle(eProjR, r)
-    # print 'right elbow phi=', ePhiR
-    ff.append([eThetaR, ePhiR])
+	shoudler_theta_l,shoulder_phi_l = gen_theta_phi(shoudler_left,u,r)
+	ff.append([shoudler_theta_l, shoulder_phi_l])
 
-    # knee left & right
-    kThetaL = utils.extmath.vAngle(u, vKneeLeft)
-    # print 'left knee theta=', kThetaL
-    kProjL = utils.extmath.planeProject(vKneeLeft, u)
-    kPhiL = utils.extmath.vAngle(kProjL, r)
-    # print 'left knee phi=', kPhiL
-    ff.append([kThetaL, kPhiL])
+	shoudler_theta_r,shoulder_phi_r = gen_theta_phi(shoudler_right,u,r)
+	ff.append([shoudler_theta_r, shoulder_phi_r])
 
-    kThetaR = utils.extmath.vAngle(u, vKneeRight)
-    # print 'right knee theta=', kThetaR
-    kProjR = utils.extmath.planeProject(vKneeRight, u)
-    kPhiR = utils.extmath.vAngle(kProjR, r)
-    # print 'right knee phi=', kPhiR
-    ff.append([kThetaR, kPhiR])
+	hip_theta_l,hip_phi_l = gen_theta_phi(hip_left,u,r)
+	ff.append([hip_theta_l, hip_phi_l])
 
-    # neck
-    nTheta = utils.extmath.vAngle(u, vNeck)
-    # print 'neck theta=', nTheta
-    nProj = utils.extmath.planeProject(vNeck, u)
-    nPhi = utils.extmath.vAngle(nProj, r)
-    # print 'neck phi=', nPhi
-    ff.append([nTheta, nPhi])
+	hip_theta_r,hip_phi_r = gen_theta_phi(hip_right,u,r)
+	ff.append([hip_theta_r, hip_phi_r])
 
-    # print 'ff=\n', ff
+	spine_theta_u, spine_phi_u = gen_theta_phi(spine_upper, u, r)
+	ff.append([spine_theta_u, spine_phi_u])
 
-    # second degree joints
-    vHandLeft = posSet[6] - posSet[5]
-    vHandRight = posSet[10] - posSet[9]
-    vAnkleLeft = posSet[14] - posSet[13]
-    vAnkelRight = posSet[18] - posSet[17]
+	spine_theta_l, spine_phi_l = gen_theta_phi(spine_lower, u, r)
+	ff.append([spine_theta_l, spine_phi_l])
+	# first degree joints
 
-    # hand left & right
-    hThetaL = utils.extmath.vAngle(vElbowLeft, vHandLeft)
-    # print 'left hand theta=', hThetaL
-    rProj = utils.extmath.planeProject(r, vElbowLeft)
-    vhandLProj = utils.extmath.planeProject(vHandLeft, vElbowLeft)
-    hPhiL = utils.extmath.vAngle(rProj, vhandLProj)
-    # print 'left hand phi=', hPhiL
-    ff.append([hThetaL, hPhiL])
 
-    hThetaR = utils.extmath.vAngle(vElbowRight, vHandRight)
-    # print 'right hand theta=', hThetaR
-    rProj = utils.extmath.planeProject(r, vElbowRight)
-    vhandRProj = utils.extmath.planeProject(vHandRight, vElbowRight)
-    hPhiR = utils.extmath.vAngle(rProj, vhandRProj)
-    # print 'right hand phi=', hPhiR
-    ff.append([hThetaR, hPhiR])
+	elbow_left = pose_set[5] - pose_set[4]
+	elbow_right = pose_set[9] - pose_set[8]
+	knee_left = pose_set[13] - pose_set[12]
+	knee_right = pose_set[17] - pose_set[16]
+	neck = pose_set[2] - pose_set[20]
 
-    # ankle left & right
-    aThetaL = utils.extmath.vAngle(vKneeLeft, vAnkleLeft)
-    # print 'left ankle theta=', aThetaL
-    rProj = utils.extmath.planeProject(r, vKneeLeft)
-    vAnkleLProj = utils.extmath.planeProject(vAnkleLeft, vKneeLeft)
-    aPhiL = utils.extmath.vAngle(rProj, vAnkleLProj)
-    # print 'left ankle phi=', aPhiL
-    ff.append([aThetaL, aPhiL])
+	# elbow left & right
+	elbow_theta_l = utils.extmath.vector_angle(u, elbow_left)
+	# print 'left elbow theta=', elbow_theta_l
+	elbow_proj_l = utils.extmath.plane_proj(elbow_left, u)
+	elbow_phi_l = utils.extmath.vector_angle(elbow_proj_l, r)
+	# print 'left elbow phi=', elbow_phi_l
+	ff.append([elbow_theta_l, elbow_phi_l])
 
-    aThetaR = utils.extmath.vAngle(vKneeRight, vAnkelRight)
-    # print 'right ankle theta=', aThetaR
-    rProj = utils.extmath.planeProject(r, vKneeRight)
-    vAnkleRProj = utils.extmath.planeProject(vAnkelRight, vKneeRight)
-    aPhiR = utils.extmath.vAngle(rProj, vAnkleRProj)
-    # print 'right ankle phi=', aPhiR
-    ff.append([aThetaR, aPhiR])
+	elbow_theta_r = utils.extmath.vector_angle(u, elbow_right)
+	# print 'right elbow theta=', elbow_theta_r
+	elbow_proj_r = utils.extmath.plane_proj(elbow_right, u)
+	elbow_phi_r = utils.extmath.vector_angle(elbow_proj_r, r)
+	# print 'right elbow phi=', elbow_phi_r
+	ff.append([elbow_theta_r, elbow_phi_r])
 
-    # print 'sf=\n', sf
-    return ff
+	# knee left & right
+	knee_theta_l = utils.extmath.vector_angle(u, knee_left)
+	# print 'left knee theta=', knee_theta_l
+	knee_proj_l = utils.extmath.plane_proj(knee_left, u)
+	knee_phi_l = utils.extmath.vector_angle(knee_proj_l, r)
+	# print 'left knee phi=', knee_phi_l
+	ff.append([knee_theta_l, knee_phi_l])
+
+	knee_theta_r = utils.extmath.vector_angle(u, knee_right)
+	# print 'right knee theta=', knee_theta_r
+	knee_proj_r = utils.extmath.plane_proj(knee_right, u)
+	knee_phi_r = utils.extmath.vector_angle(knee_proj_r, r)
+	# print 'right knee phi=', knee_phi_r
+	ff.append([knee_theta_r, knee_phi_r])
+
+	# neck
+	neck_theta = utils.extmath.vector_angle(u, neck)
+	# print 'neck theta=', neck_theta
+	neck_proj = utils.extmath.plane_proj(neck, u)
+	neck_phi = utils.extmath.vector_angle(neck_proj, r)
+	# pr_rint 'neck phi=', neck_phi
+	ff.append([neck_theta, neck_phi])
+
+	# print 'ff=\n', ff
+
+	# second degree joints
+	hand_left = pose_set[6] - pose_set[5]
+	hand_right = pose_set[10] - pose_set[9]
+	ankle_left = pose_set[14] - pose_set[13]
+	ankle_right = pose_set[18] - pose_set[17]
+
+	# hand left & right
+	hand_theta_l = utils.extmath.vector_angle(elbow_left, hand_left)
+	# print 'left hand theta=', hand_theta_l
+	axisr_proj = utils.extmath.plane_proj(r, elbow_left)
+	hand_proj_l = utils.extmath.plane_proj(hand_left, elbow_left)
+	hPhiL = utils.extmath.vector_angle(axisr_proj, hand_proj_l)
+	# print 'left hand phi=', hPhiL
+	ff.append([hand_theta_l, hPhiL])
+
+	hand_theta_r = utils.extmath.vector_angle(elbow_right, hand_right)
+	# print 'right hand theta=', hand_theta_r
+	axisr_proj = utils.extmath.plane_proj(r, elbow_right)
+	hand_proj_r = utils.extmath.plane_proj(hand_right, elbow_right)
+	hand_phi_r = utils.extmath.vector_angle(axisr_proj, hand_proj_r)
+	# print 'right hand phi=', hand_phi_r
+	ff.append([hand_theta_r, hand_phi_r])
+
+	# ankle left & right
+	ankle_theta_l = utils.extmath.vector_angle(knee_left, ankle_left)
+	# print 'left ankle theta=', ankle_theta_l
+	axisr_proj = utils.extmath.plane_proj(r, knee_left)
+	vAnkleLProj = utils.extmath.plane_proj(ankle_left, knee_left)
+	ankle_phi_l = utils.extmath.vector_angle(axisr_proj, vAnkleLProj)
+	# print 'left ankle phi=', ankle_phi_l
+	ff.append([ankle_theta_l, ankle_phi_l])
+
+	ankle_theta_r = utils.extmath.vector_angle(knee_right, ankle_right)
+	# print 'right ankle theta=', ankle_theta_r
+	axisr_proj = utils.extmath.plane_proj(r, knee_right)
+	ankle_proj_r = utils.extmath.plane_proj(ankle_right, knee_right)
+	ankle_phi_r = utils.extmath.vector_angle(axisr_proj, ankle_proj_r)
+	# print 'right ankle phi=', ankle_phi_r
+	ff.append([ankle_theta_r, ankle_phi_r])
+
+	# print 'sf=\n', sf
+	return ff
