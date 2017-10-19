@@ -209,13 +209,23 @@ for i in xrange(0,1):
         test_accuracy,test_correct_pred=sess.run([accuracy,correct_pred], feed_dict={X:test_x,
                                           Y: test_y})
 
-        #test_x_data
 
-        # fig = plt.figure()
-        # ax = Axes3D(fig)
-        # for jj in dfMat:
-        #     ax.scatter(jj[0],jj[1],jj[2],color='b')
-        # plt.draw()
+        outfile = open('test_x_data.txt', 'ab')
+        np.save(outfile, test_x_data)
+        outfile.close()
+
+        outfile = open('test_x.txt', 'ab')
+        np.save(outfile, test_x)
+        outfile.close()
+
+        outfile = open('test_y.txt', 'ab')
+        np.save(outfile, test_y)
+        outfile.close()
+
+        outfile = open('test_correct_pred.txt', 'ab')
+        np.save(outfile, test_correct_pred)
+        outfile.close()
+
 
 #
 # outfile = open('statistics_accuracy_18.txt', 'ab')
