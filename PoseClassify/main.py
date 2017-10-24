@@ -27,7 +27,7 @@ def gen_feature_file(features_file,data_file, source_file):
     :return: the extracted feature
     '''
     features = []
-    data=[]
+    data_x=[]
     # determine whether we need to generate the files
     if not os.path.exists(features_file):
         outfile = open(features_file, 'ab')
@@ -60,10 +60,10 @@ def gen_feature_file(features_file,data_file, source_file):
         
         print 'loading data...',data_file
         outdata = open(data_file, 'rb')
-        data = np.load(outdata)
+        data_x = np.load(outdata)
         outdata.close()
         #print features.shape
-    return features,data
+    return features,data_x
 
 case='chest'
 
@@ -108,9 +108,9 @@ data_y=shuffle_y[testing_size+1:-1]
 
 
 # parameters
-learning_rate = 0.04
+learning_rate = 0.05
 #num_steps = 100  #not use any more
-batch_size = 30
+batch_size = 301
 display_step = 10
 
 print 'total training case number is {0}, total testing case is {1}'.format(len(data_x),len(test_x))
@@ -228,7 +228,7 @@ for i in xrange(0,200):
 
 
 #
-outfile = open('statistics_accuracy_30.txt', 'ab')
+outfile = open('statistics_accuracy_30.txt', 'wb')
 np.save(outfile, statistics_accuracy)
 outfile.close()
 

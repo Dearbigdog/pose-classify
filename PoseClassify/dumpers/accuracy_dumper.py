@@ -25,7 +25,7 @@ plt.plot(xrange(0,len(statistics_accuracy_30)),statistics_accuracy_30, 'r--')
 
 red_patch = mpatches.Patch(color='red', label='30 features')
 blue_patch = mpatches.Patch(color='blue', label='18 features')
-green_patch = mpatches.Patch(color='blue', label='10 features')
+green_patch = mpatches.Patch(color='green', label='10 features')
 plt.legend(handles=[red_patch,blue_patch,green_patch])
 
 

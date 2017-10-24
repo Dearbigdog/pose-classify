@@ -132,7 +132,8 @@ def export_features(pose_set, u, r, t):
 	:return: angles along the first and second degree joints
 	'''
 	ff = []
-	# zero degree joints
+
+	# zero degree joints  0-11
 	shoudler_left = pose_set[4] - pose_set[20]
 	shoudler_right = pose_set[8] - pose_set[20]
 	hip_left = pose_set[12] - pose_set[0]
@@ -157,9 +158,8 @@ def export_features(pose_set, u, r, t):
 
 	spine_theta_l, spine_phi_l = gen_theta_phi(spine_lower, u, r)
 	ff.append([spine_theta_l, spine_phi_l])
-	# first degree joints
 
-
+	# first degree joints 12-21
 	elbow_left = pose_set[5] - pose_set[4]
 	elbow_right = pose_set[9] - pose_set[8]
 	knee_left = pose_set[13] - pose_set[12]
@@ -167,46 +167,26 @@ def export_features(pose_set, u, r, t):
 	neck = pose_set[2] - pose_set[20]
 
 	# elbow left & right
-	elbow_theta_l = utils.extmath.vector_angle(u, elbow_left)
-	# print 'left elbow theta=', elbow_theta_l
-	elbow_proj_l = utils.extmath.plane_proj(elbow_left, u)
-	elbow_phi_l = utils.extmath.vector_angle(elbow_proj_l, r)
-	# print 'left elbow phi=', elbow_phi_l
+	elbow_theta_l,elbow_phi_l=gen_theta_phi(elbow_left, u, r)
 	ff.append([elbow_theta_l, elbow_phi_l])
 
-	elbow_theta_r = utils.extmath.vector_angle(u, elbow_right)
-	# print 'right elbow theta=', elbow_theta_r
-	elbow_proj_r = utils.extmath.plane_proj(elbow_right, u)
-	elbow_phi_r = utils.extmath.vector_angle(elbow_proj_r, r)
-	# print 'right elbow phi=', elbow_phi_r
+	elbow_theta_r, elbow_phi_r=gen_theta_phi(elbow_right, u, r)
 	ff.append([elbow_theta_r, elbow_phi_r])
 
 	# knee left & right
-	knee_theta_l = utils.extmath.vector_angle(u, knee_left)
-	# print 'left knee theta=', knee_theta_l
-	knee_proj_l = utils.extmath.plane_proj(knee_left, u)
-	knee_phi_l = utils.extmath.vector_angle(knee_proj_l, r)
-	# print 'left knee phi=', knee_phi_l
+	knee_theta_l, knee_phi_l=gen_theta_phi(knee_left, u, r)
 	ff.append([knee_theta_l, knee_phi_l])
 
-	knee_theta_r = utils.extmath.vector_angle(u, knee_right)
-	# print 'right knee theta=', knee_theta_r
-	knee_proj_r = utils.extmath.plane_proj(knee_right, u)
-	knee_phi_r = utils.extmath.vector_angle(knee_proj_r, r)
-	# print 'right knee phi=', knee_phi_r
+	knee_theta_r, knee_phi_r=gen_theta_phi(knee_right, u, r)
 	ff.append([knee_theta_r, knee_phi_r])
 
 	# neck
-	neck_theta = utils.extmath.vector_angle(u, neck)
-	# print 'neck theta=', neck_theta
-	neck_proj = utils.extmath.plane_proj(neck, u)
-	neck_phi = utils.extmath.vector_angle(neck_proj, r)
-	# pr_rint 'neck phi=', neck_phi
+	neck_theta, neck_phi=gen_theta_phi(neck, u, r)
 	ff.append([neck_theta, neck_phi])
 
 	# print 'ff=\n', ff
 
-	# second degree joints
+	# second degree joints 22-29
 	hand_left = pose_set[6] - pose_set[5]
 	hand_right = pose_set[10] - pose_set[9]
 	ankle_left = pose_set[14] - pose_set[13]
