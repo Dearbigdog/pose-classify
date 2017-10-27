@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
-statistics_accuracy_10=np.load('../statistics_accuracy_10.txt')
+statistics_accuracy_10=np.load('../statistics_accuracy_105.txt')
 statistics_accuracy_30=np.load('../statistics_accuracy_30.txt')
 plt.ylim((0,100))
 plt.plot(xrange(0,len(statistics_accuracy_10)),statistics_accuracy_10, 'g--')
@@ -25,7 +25,7 @@ plt.plot(xrange(0,len(statistics_accuracy_30)),statistics_accuracy_30, 'r--')
 
 red_patch = mpatches.Patch(color='red', label='30 features')
 blue_patch = mpatches.Patch(color='blue', label='18 features')
-green_patch = mpatches.Patch(color='green', label='10 features')
+green_patch = mpatches.Patch(color='green', label='105 features')
 plt.legend(handles=[red_patch,blue_patch,green_patch])
 
 

@@ -11,3 +11,9 @@ def plane_proj(x, n):
     temp=np.dot(x, unitN)
     xProjected = x -[temp*i for i in unitN]
     return xProjected
+
+def distanse_3d(x1,y1,z1,x2,y2,z2):
+    d1=np.sqrt(np.power(x1-x2,2))
+    d2=np.sqrt(np.power(y1-y2,2))
+    d3=np.sqrt(np.power(z1-z2,2))
+    return d1+d2+d3

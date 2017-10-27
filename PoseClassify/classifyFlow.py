@@ -40,24 +40,26 @@ for i in torsoIndices:
 torsoMatrix = np.array(torsoMatrix)
 print 'torsoMatrix shape=', torsoMatrix.shape
 
+#
+# # sklearn
+# def doPCA():
+#     pca = PCA(n_components=2)
+#     pca.fit(torsoMatrix)
+#     return pca
+#
+#
+# pca = doPCA()
+# print pca.explained_variance_ratio_
+# firstPc = pca.components_[0]
+# secondPc = pca.components_[1]
+#
+# print 'first pc=', firstPc
+# print 'second pc=', secondPc
+#
+# transformedData = pca.transform(torsoMatrix)
+# print 'transformed data shape=', transformedData.shape
 
-# sklearn
-def doPCA():
-    pca = PCA(n_components=2)
-    pca.fit(torsoMatrix)
-    return pca
 
-
-pca = doPCA()
-print pca.explained_variance_ratio_
-firstPc = pca.components_[0]
-secondPc = pca.components_[1]
-
-print 'first pc=', firstPc
-print 'second pc=', secondPc
-
-transformedData = pca.transform(torsoMatrix)
-print 'transformed data shape=', transformedData.shape
 # fig2 = plt.figure()
 # ax2 = Axes3D(fig2)
 # for ii,jj in zip(transformedData,torsoMatrix):
@@ -129,40 +131,40 @@ vKneeRight = posX[0][17] - posX[0][16]
 vNeck = posX[0][2] - posX[0][20]
 
 # elbow left & right
-eThetaL = utils.extmath.vAngle(u, vElbowLeft)
+eThetaL = utils.extmath.vector_angle(u, vElbowLeft)
 print 'left elbow theta=', eThetaL
-eProjL = utils.extmath.planeProject(vElbowLeft, u)
-ePhiL = utils.extmath.vAngle(eProjL, r)
+eProjL = utils.extmath.plane_proj(vElbowLeft, u)
+ePhiL = utils.extmath.vector_angle(eProjL, r)
 print 'left elbow phi=', ePhiL
 ff.append([eThetaL, ePhiL])
 
-eThetaR = utils.extmath.vAngle(u, vElbowRight)
+eThetaR = utils.extmath.vector_angle(u, vElbowRight)
 print 'right elbow theta=', eThetaR
-eProjR = utils.extmath.planeProject(vElbowRight, u)
-ePhiR = utils.extmath.vAngle(eProjR, r)
+eProjR = utils.extmath.plane_proj(vElbowRight, u)
+ePhiR = utils.extmath.vector_angle(eProjR, r)
 print 'right elbow phi=', ePhiR
 ff.append([eThetaR, ePhiR])
 
 # knee left & right
-kThetaL = utils.extmath.vAngle(u, vKneeLeft)
+kThetaL = utils.extmath.vector_angle(u, vKneeLeft)
 print 'left knee theta=', kThetaL
-kProjL = utils.extmath.planeProject(vKneeLeft, u)
-kPhiL = utils.extmath.vAngle(kProjL, r)
+kProjL = utils.extmath.plane_proj(vKneeLeft, u)
+kPhiL = utils.extmath.vector_angle(kProjL, r)
 print 'left knee phi=', kPhiL
 ff.append([kThetaL, kPhiL])
 
-kThetaR = utils.extmath.vAngle(u, vKneeRight)
+kThetaR = utils.extmath.vector_angle(u, vKneeRight)
 print 'right knee theta=', kThetaR
-kProjR = utils.extmath.planeProject(vKneeRight, u)
-kPhiR = utils.extmath.vAngle(kProjR, r)
+kProjR = utils.extmath.plane_proj(vKneeRight, u)
+kPhiR = utils.extmath.vector_angle(kProjR, r)
 print 'right knee phi=', kPhiR
 ff.append([kThetaR, kPhiR])
 
 # neck
-nTheta = utils.extmath.vAngle(u, vNeck)
+nTheta = utils.extmath.vector_angle(u, vNeck)
 print 'neck theta=', nTheta
-nProj = utils.extmath.planeProject(vNeck, u)
-nPhi = utils.extmath.vAngle(nProj, r)
+nProj = utils.extmath.plane_proj(vNeck, u)
+nPhi = utils.extmath.vector_angle(nProj, r)
 print 'neck phi=', nPhi
 ff.append([nTheta, nPhi])
 
@@ -174,36 +176,36 @@ vAnkleLeft = posX[0][14] - posX[0][13]
 vAnkelRight = posX[0][18] - posX[0][17]
 
 # hand left & right
-hThetaL = utils.extmath.vAngle(vElbowLeft, vHandLeft)
+hThetaL = utils.extmath.vector_angle(vElbowLeft, vHandLeft)
 print 'left hand theta=', hThetaL
-rProj = utils.extmath.planeProject(r, vElbowLeft)
-vhandLProj = utils.extmath.planeProject(vHandLeft, vElbowLeft)
-hPhiL = utils.extmath.vAngle(rProj, vhandLProj)
+rProj = utils.extmath.plane_proj(r, vElbowLeft)
+vhandLProj = utils.extmath.plane_proj(vHandLeft, vElbowLeft)
+hPhiL = utils.extmath.vector_angle(rProj, vhandLProj)
 print 'left hand phi=', hPhiL
 ff.append([hThetaL, hPhiL])
 
-hThetaR = utils.extmath.vAngle(vElbowRight, vHandRight)
+hThetaR = utils.extmath.vector_angle(vElbowRight, vHandRight)
 print 'right hand theta=', hThetaR
-rProj = utils.extmath.planeProject(r, vElbowRight)
-vhandRProj = utils.extmath.planeProject(vHandRight, vElbowRight)
-hPhiR = utils.extmath.vAngle(rProj, vhandRProj)
+rProj = utils.extmath.plane_proj(r, vElbowRight)
+vhandRProj = utils.extmath.plane_proj(vHandRight, vElbowRight)
+hPhiR = utils.extmath.vector_angle(rProj, vhandRProj)
 print 'right hand phi=', hPhiR
 ff.append([hThetaR, hPhiR])
 
 # ankle left & right
-aThetaL = utils.extmath.vAngle(vKneeLeft, vAnkleLeft)
+aThetaL = utils.extmath.vector_angle(vKneeLeft, vAnkleLeft)
 print 'left ankle theta=', aThetaL
-rProj = utils.extmath.planeProject(r, vKneeLeft)
-vAnkleLProj = utils.extmath.planeProject(vAnkleLeft, vKneeLeft)
-aPhiL = utils.extmath.vAngle(rProj, vAnkleLProj)
+rProj = utils.extmath.plane_proj(r, vKneeLeft)
+vAnkleLProj = utils.extmath.plane_proj(vAnkleLeft, vKneeLeft)
+aPhiL = utils.extmath.vector_angle(rProj, vAnkleLProj)
 print 'left ankle phi=', aPhiL
 ff.append([aThetaL, aPhiL])
 
-aThetaR = utils.extmath.vAngle(vKneeRight, vAnkelRight)
+aThetaR = utils.extmath.vector_angle(vKneeRight, vAnkelRight)
 print 'right ankle theta=', aThetaR
-rProj = utils.extmath.planeProject(r, vKneeRight)
-vAnkleRProj = utils.extmath.planeProject(vAnkelRight, vKneeRight)
-aPhiR = utils.extmath.vAngle(rProj, vAnkleRProj)
+rProj = utils.extmath.plane_proj(r, vKneeRight)
+vAnkleRProj = utils.extmath.plane_proj(vAnkelRight, vKneeRight)
+aPhiR = utils.extmath.vector_angle(rProj, vAnkleRProj)
 print 'right ankle phi=', aPhiR
 ff.append([aThetaR, aPhiR])
 
@@ -215,11 +217,6 @@ print ff.shape
 # for jj in dfMat:
 #     ax.scatter(jj[0],jj[1],jj[2],color='b')
 # plt.draw()
-
-
-
-
-
 
 
 plt.show()
