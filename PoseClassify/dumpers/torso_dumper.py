@@ -27,7 +27,7 @@ for i in torsoIndices:
 joint_map_mean = joint_map - np.mean(joint_map, axis=0)
 # u,r,t=modules.get_torso_pca(joint_map)
 
-
+##
 def doPCA(joint_map_mean):
 	pca = PCA(n_components=2)
 	pca.fit(joint_map_mean)
