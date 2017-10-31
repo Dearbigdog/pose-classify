@@ -17,7 +17,7 @@ import sys
 generate the features and store them instead of calculate every time
 
 '''
-feature_dim = 30
+feature_dim = 43
 
 
 def gen_feature_file(features_file, data_file, source_file):
@@ -30,8 +30,6 @@ def gen_feature_file(features_file, data_file, source_file):
 	data_x = []
 	# determine whether we need to generate the files
 	if not os.path.exists(features_file):
-		outfile = open(features_file, 'ab')
-		outdata = open(data_file, 'ab')
 		# load pos data and convert them to theta and phi
 		print 'loading... path=', source_file
 		pos_data = modules.load_data(source_file)
@@ -40,16 +38,19 @@ def gen_feature_file(features_file, data_file, source_file):
 		for i in range(0, torsos.shape[0]):
 			print 'total torso= {0},executing torso:{1}'.format(torsos.shape[0], i)
 			u, r, t = modules.get_torso_pca(torsos[i])
-			f_angle = modules.export_angle_features(data_x[i], u, r, t)
+			f_angle_3d = modules.export_angle_features_3d(data_x[i], u, r, t)
+			f_angle_2d = modules.export_angle_features_2d(data_x[i])
 			# f_dis=modules.export_distance_features(data_x[i])
 			# flatten the feature data
-			# f_all = np.concatenate((np.reshape(f_angle, (30,)), data_x[i].ravel()), axis=0)
-			f_all = np.reshape(f_angle, (30,))
+			f_all = np.concatenate((np.reshape(f_angle_3d, (30,)), np.reshape(f_angle_2d,(13,))), axis=0)
+			# f_all = np.reshape(f_angle_3d, (30,))
 			features.append(f_all)
 
 		features = np.array(features)
 		data_x = np.array(data_x)
 		print features.shape
+		outfile = open(features_file, 'ab')
+		outdata = open(data_file, 'ab')
 		np.save(outfile, features)
 		outfile.close()
 		np.save(outdata, data_x)
@@ -109,9 +110,9 @@ data_x = shuffle_x[testing_size + 1:-1]
 data_y = shuffle_y[testing_size + 1:-1]
 
 # parameters
-learning_rate = 0.01
+learning_rate = 0.03
 # num_steps = 100  #not use any more
-batch_size = 35
+batch_size = 30
 display_step = 10
 
 print 'total training case number is {0}, total testing case is {1}'.format(len(data_x), len(test_x))
@@ -119,7 +120,7 @@ print 'learning rate is {0}, mini batch size is {1}'.format(learning_rate, batch
 
 # Network Parameters
 n_hidden_1 = 15  # 1st layer number of neurons
-n_hidden_2 = 8 # 2nd layer number of neurons
+n_hidden_2 = 6 # 2nd layer number of neurons
 num_input = feature_dim  # data input
 num_classes = 2  # total classes
 
@@ -229,8 +230,8 @@ for i in xrange(0, 100):
 		# outfile = open('test_correct_pred.txt', 'ab')
 		# np.save(outfile, test_correct_pred)
 		# outfile.close()
-
-
+#
+#
 statistics_file = 'statistics_accuracy_' + str(feature_dim) + '.txt'
 outfile = open(statistics_file, 'wb')
 np.save(outfile, statistics_accuracy)

@@ -3,7 +3,7 @@ import tensorflow as tf
 import utils.extmath
 import os
 import time
-
+import matplotlib.pyplot as plt
 
 def timeit(method):
 	def timed(*args, **kw):
@@ -69,7 +69,7 @@ def get_torso(data):
 	return dataX, torsoSet
 
 
-# get u v r from torso mat
+
 # @timeit
 def get_torso_pca(torsoMat, factors=2):
 	# tensorflow
@@ -121,6 +121,61 @@ def export_distance_features(pose_set):
 		utils.extmath.distanse_3d(i[0],i[1],i[2],center_p[0],center_p[1],center_p[2])
 	pass
 
+def get_vector_angles(v,u,r):
+	vu_theta=utils.extmath.vector_angle(v,u)
+	vr_theta=utils.extmath.vector_angle(v,r)
+	if vu_theta<90:
+		vr_theta=360-vr_theta
+	return vr_theta
+
+def export_angle_features_2d(pose_set):
+	'''
+	using pca to project the 25 joint map on a plane, calculate the angles between pca u and joint vectors.
+	:param pose_set: 25 joint map
+	:return: angle features in 2d plane
+	'''
+	u,r,t=get_torso_pca(pose_set)
+	pose_set_2d=[]
+	for x in pose_set:
+		pose_set_2d.append([np.matmul(x,u),np.matmul(x,r)])
+	pose_set_2d=np.array(pose_set_2d)
+	# treat [1] as center
+	center=pose_set_2d[1]
+	pose_set_2d_centered=[]
+	for x in pose_set_2d:
+		pose_set_2d_centered.append(x-center)
+	f_angle_2d=[]
+	n1=pose_set_2d[20]-pose_set_2d[0]
+	unit_n1 = [i / np.linalg.norm(n1) for i in n1]
+	n2=[1,-unit_n1[0]/unit_n1[1]]
+	unit_n2 = [i / np.linalg.norm(n2) for i in n2]
+	f_angle_2d.append(get_vector_angles(pose_set_2d[20]-pose_set_2d[1],unit_n1,unit_n2))
+	f_angle_2d.append(get_vector_angles(pose_set_2d[4]-pose_set_2d[1],unit_n1,unit_n2))
+	f_angle_2d.append(get_vector_angles(pose_set_2d[8]-pose_set_2d[1],unit_n1,unit_n2))
+	f_angle_2d.append(get_vector_angles(pose_set_2d[5]-pose_set_2d[1],unit_n1,unit_n2))
+	f_angle_2d.append(get_vector_angles(pose_set_2d[9]-pose_set_2d[1],unit_n1,unit_n2))
+	f_angle_2d.append(get_vector_angles(pose_set_2d[6]-pose_set_2d[1],unit_n1,unit_n2))
+	f_angle_2d.append(get_vector_angles(pose_set_2d[10]-pose_set_2d[1],unit_n1,unit_n2))
+	f_angle_2d.append(get_vector_angles(pose_set_2d[16]-pose_set_2d[1],unit_n1,unit_n2))
+	f_angle_2d.append(get_vector_angles(pose_set_2d[12]-pose_set_2d[1],unit_n1,unit_n2))
+	f_angle_2d.append(get_vector_angles(pose_set_2d[17]-pose_set_2d[1],unit_n1,unit_n2))
+	f_angle_2d.append(get_vector_angles(pose_set_2d[13]-pose_set_2d[1],unit_n1,unit_n2))
+	f_angle_2d.append(get_vector_angles(pose_set_2d[18]-pose_set_2d[1],unit_n1,unit_n2))
+	f_angle_2d.append(get_vector_angles(pose_set_2d[14]-pose_set_2d[1],unit_n1,unit_n2))
+
+	# fig = plt.figure(figsize=plt.figaspect(0.5))
+	# ax = fig.add_subplot(1, 2, 1, projection='3d')
+	# plt.title('joint map')
+	# for jj in pose_set:
+	# 	ax.scatter(jj[0], jj[1], jj[2], color='b')
+	# ax2 = fig.add_subplot(1, 2, 2)
+	# plt.title('torso')
+	# for ii in pose_set_2d:
+	# 	ax2.scatter(ii[0], ii[1], color='r')
+	# plt.draw()
+	# plt.show()
+	return f_angle_2d
+
 
 
 def gen_first_theta_phi(x, u, r, t):
@@ -169,7 +224,7 @@ def gen_second_theta_phi(x,y, u, r, t):
 	return theta, phi
 
 # @timeit
-def export_angle_features(pose_set, u, r, t):
+def export_angle_features_3d(pose_set, u, r, t):
 	'''
 	:param pose_set: joint maps
 	:param u: pca u top-down

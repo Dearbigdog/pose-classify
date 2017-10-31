@@ -1,21 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d2a00aa4-69e9-48dc-9f24-e863e9aaf20c" name="Default" comment="" />
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <list default="true" id="78e37122-9983-4430-af9d-d6bcfba391cf" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data_chest_pos.txt" afterPath="$PROJECT_DIR$/data_chest_pos.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dumpers/accuracy_dumper.py" afterPath="$PROJECT_DIR$/dumpers/accuracy_dumper.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dumpers/torso_dumper.py" afterPath="$PROJECT_DIR$/dumpers/torso_dumper.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/f_chest_pos.txt" afterPath="$PROJECT_DIR$/f_chest_pos.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/utils/modules.py" afterPath="$PROJECT_DIR$/utils/modules.py" />
+    </list>
+    <ignored path=".idea/vcs.xml" />
+    <ignored mask="*.xml" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FavoritesManager">
+    <favorites_list name="PoseClassify" />
+  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="616">
-              <caret line="41" column="54" lean-forward="false" selection-start-line="41" selection-start-column="54" selection-end-line="41" selection-end-column="54" />
+            <state relative-caret-position="562">
+              <caret line="176" column="0" lean-forward="true" selection-start-line="176" selection-start-column="0" selection-end-line="176" selection-end-column="0" />
               <folding>
                 <element signature="e#0#38#0" expanded="true" />
               </folding>
@@ -23,23 +35,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="joint_dumper.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dumpers/joint_dumper.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="352">
-              <caret line="18" column="50" lean-forward="false" selection-start-line="18" selection-start-column="50" selection-end-line="18" selection-end-column="50" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="torso_dumper.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="torso_dumper.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dumpers/torso_dumper.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="667">
-              <caret line="53" column="46" lean-forward="false" selection-start-line="53" selection-start-column="46" selection-end-line="53" selection-end-column="46" />
+            <state relative-caret-position="-17">
+              <caret line="41" column="0" lean-forward="true" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -50,9 +50,11 @@
       <file leaf-file-name="accuracy_dumper.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dumpers/accuracy_dumper.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="18" lean-forward="false" selection-start-line="0" selection-start-column="18" selection-end-line="0" selection-end-column="18" />
-              <folding />
+            <state relative-caret-position="484">
+              <caret line="22" column="77" lean-forward="true" selection-start-line="22" selection-start-column="77" selection-end-line="22" selection-end-column="77" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -60,19 +62,37 @@
       <file leaf-file-name="modules.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/utils/modules.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1518">
-              <caret line="73" column="17" lean-forward="false" selection-start-line="73" selection-start-column="14" selection-end-line="73" selection-end-column="17" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="extmath.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/utils/extmath.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="10" column="25" lean-forward="false" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="25" />
-              <folding />
+            <state relative-caret-position="210">
+              <caret line="176" column="0" lean-forward="false" selection-start-line="176" selection-start-column="0" selection-end-line="176" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+                <element signature="e#140#469#0" expanded="false" />
+                <element signature="e#166#454#0" expanded="false" />
+                <element signature="e#259#357#0" expanded="false" />
+                <element signature="e#369#438#0" expanded="false" />
+                <element signature="e#495#820#0" expanded="false" />
+                <element signature="e#495#553#1" expanded="false" />
+                <element signature="e#615#807#0" expanded="false" />
+                <element signature="e#634#807#0" expanded="false" />
+                <element signature="e#661#807#0" expanded="false" />
+                <element signature="e#713#807#0" expanded="false" />
+                <element signature="e#845#1666#0" expanded="false" />
+                <element signature="e#845#954#1" expanded="false" />
+                <element signature="e#1026#1259#0" expanded="false" />
+                <element signature="e#1083#1235#0" expanded="false" />
+                <element signature="e#1286#1341#0" expanded="false" />
+                <element signature="e#1467#1565#0" expanded="false" />
+                <element signature="e#1888#1893#0" expanded="false" />
+                <element signature="e#2806#2932#0" expanded="false" />
+                <element signature="e#5316#5695#0" expanded="false" />
+                <element signature="e#5316#5433#1" expanded="false" />
+                <element signature="e#5738#6481#0" expanded="false" />
+                <element signature="e#5738#5880#1" expanded="false" />
+                <element signature="e#6008#6040#0" expanded="false" />
+                <element signature="e#6543#9276#0" expanded="false" />
+                <element signature="e#6543#6713#1" expanded="false" />
+                <element signature="e#8516#8535#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -80,7 +100,7 @@
       <file leaf-file-name="classifyFlow.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/classifyFlow.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1980">
+            <state relative-caret-position="2090">
               <caret line="95" column="43" lean-forward="false" selection-start-line="95" selection-start-column="43" selection-end-line="95" selection-end-column="43" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
@@ -89,89 +109,43 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="extmath.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/utils/extmath.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="198">
+              <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="42" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
     </leaf>
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Python Script" />
-      </list>
-    </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>SVM</find>
-      <find>input_fn</find>
-      <find>posList</find>
-      <find>y_</find>
-      <find>df_train</find>
-      <find>sess</find>
-      <find>posX[0]</find>
-      <find>vElbowLeft</find>
-      <find>rProj</find>
-      <find>k</find>
-      <find>gen_theta_phi</find>
-      <find>planeProject</find>
-      <find>torsoMatrix</find>
-      <find>tor</find>
-      <find>pca</find>
+      <find>export_angle_features</find>
+      <find>-pose_set_2d[1],u,r))</find>
     </findStrings>
     <replaceStrings>
-      <replace>posSet</replace>
-      <replace>ankle_left</replace>
-      <replace>axisr_proj</replace>
-      <replace>, u, r,t)</replace>
-      <replace>plane_proj</replace>
-      <replace>torso_map</replace>
+      <replace>export_angle_features_3d</replace>
+      <replace>-pose_set_2d[1],unit_n1,unit_n2))</replace>
     </replaceStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/tfLinearModel.py" />
-        <option value="$PROJECT_DIR$/softmaxSample.py" />
-        <option value="$PROJECT_DIR$/tensorflow/test1.py" />
-        <option value="$PROJECT_DIR$/utils/__init__.py" />
-        <option value="$PROJECT_DIR$/utils/math.py" />
-        <option value="$PROJECT_DIR$/getTorsoPCA.py" />
-        <option value="$PROJECT_DIR$/extractFeature.py" />
-        <option value="$PROJECT_DIR$/pygameTest.py" />
-        <option value="$PROJECT_DIR$/kinectSample.py" />
-        <option value="$PROJECT_DIR$/tools/renameFrames.py" />
-        <option value="$PROJECT_DIR$/dumpers/joint_dumper.py" />
-        <option value="$PROJECT_DIR$/dumpers/accuracy_dumper.py" />
-        <option value="$PROJECT_DIR$/utils/extmath.py" />
-        <option value="$PROJECT_DIR$/classifyFlow.py" />
-        <option value="$PROJECT_DIR$/main.py" />
-        <option value="$PROJECT_DIR$/utils/modules.py" />
         <option value="$PROJECT_DIR$/dumpers/torso_dumper.py" />
+        <option value="$PROJECT_DIR$/utils/modules.py" />
+        <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/dumpers/accuracy_dumper.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="65" />
-    <option name="y" value="136" />
-    <option name="width" value="1853" />
-    <option name="height" value="1076" />
-  </component>
-  <component name="ProjectInspectionProfilesVisibleTreeState">
-    <entry key="Project Default">
-      <profile-state>
-        <expanded-state>
-          <State>
-            <id />
-          </State>
-          <State>
-            <id>Python</id>
-          </State>
-        </expanded-state>
-        <selected-state>
-          <State>
-            <id>PyCompatibilityInspection</id>
-          </State>
-        </selected-state>
-      </profile-state>
-    </entry>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -188,8 +162,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -197,16 +169,23 @@
               <item name="PoseClassify" type="b2602c69:ProjectViewProjectNode" />
               <item name="PoseClassify" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="PoseClassify" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PoseClassify" type="462c0819:PsiDirectoryNode" />
+              <item name="dumpers" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="PoseClassify" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PoseClassify" type="462c0819:PsiDirectoryNode" />
+              <item name="utils" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
-  </component>
-  <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../spider" />
-    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -220,7 +199,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.torso_dumper">
+  <component name="RunManager" selected="Python.accuracy_dumper">
     <configuration name="accuracy_dumper" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -234,23 +213,6 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="PoseClassify" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/dumpers/accuracy_dumper.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-    </configuration>
-    <configuration name="joint_dumper" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/dumpers" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="PoseClassify" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/dumpers/joint_dumper.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -272,23 +234,6 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
     </configuration>
-    <configuration name="renameFrames" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tools" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="PoseClassify" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tools/renameFrames.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-    </configuration>
     <configuration name="torso_dumper" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -306,20 +251,16 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
     </configuration>
-    <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.main" />
-      <item index="1" class="java.lang.String" itemvalue="Python.renameFrames" />
-      <item index="2" class="java.lang.String" itemvalue="Python.joint_dumper" />
-      <item index="3" class="java.lang.String" itemvalue="Python.accuracy_dumper" />
-      <item index="4" class="java.lang.String" itemvalue="Python.torso_dumper" />
+    <list size="3">
+      <item index="0" class="java.lang.String" itemvalue="Python.torso_dumper" />
+      <item index="1" class="java.lang.String" itemvalue="Python.main" />
+      <item index="2" class="java.lang.String" itemvalue="Python.accuracy_dumper" />
     </list>
     <recent_temporary>
-      <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.torso_dumper" />
+      <list size="3">
+        <item index="0" class="java.lang.String" itemvalue="Python.accuracy_dumper" />
         <item index="1" class="java.lang.String" itemvalue="Python.main" />
-        <item index="2" class="java.lang.String" itemvalue="Python.joint_dumper" />
-        <item index="3" class="java.lang.String" itemvalue="Python.accuracy_dumper" />
-        <item index="4" class="java.lang.String" itemvalue="Python.renameFrames" />
+        <item index="2" class="java.lang.String" itemvalue="Python.torso_dumper" />
       </list>
     </recent_temporary>
   </component>
@@ -334,6 +275,14 @@
       <option name="presentableId" value="Default" />
       <updated>1504588496937</updated>
     </task>
+    <task id="LOCAL-00001" summary="test git">
+      <created>1509073073105</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1509073073105</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TodoView">
@@ -346,18 +295,20 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="136" width="1857" height="1092" extended-state="6" />
+    <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19799219" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3128555" sideWeight="0.49087894" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20803124" sideWeight="0.4931973" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31242874" sideWeight="0.49087894" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24892704" sideWeight="0.50193477" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" show_stripe_button="true" weight="0.32959184" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" x="2258" y="73" width="1424" height="628" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32939914" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" show_stripe_button="true" weight="0.32959184" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" x="2258" y="73" width="1424" height="834" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295325" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287827" sideWeight="0.49806523" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2498618" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32764506" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29351535" sideWeight="0.49806523" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29304448" sideWeight="0.49806523" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20803124" sideWeight="0.50680274" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22719735" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -365,7 +316,6 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32932165" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32939914" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -389,6 +339,32 @@
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22719735" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout-to-restore>
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
@@ -396,9 +372,18 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/.." />
     </ignored-roots>
+    <MESSAGE value="test git" />
+    <option name="LAST_COMMIT_MESSAGE" value="test git" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/utils/modules.py</url>
+          <line>176</line>
+          <option name="timeStamp" value="87" />
+        </line-breakpoint>
+      </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
@@ -409,7 +394,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="62" />
+      <option name="time" value="88" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
@@ -419,13 +404,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/tfLinearModel.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2394">
-          <caret line="138" column="58" lean-forward="false" selection-start-line="138" selection-start-column="51" selection-end-line="138" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/kinectSample.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
@@ -607,18 +585,75 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/statistics_accuracy_18.txt" />
+    <entry file="file://$PROJECT_DIR$/classifyFlow.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2090">
+          <caret line="95" column="43" lean-forward="false" selection-start-line="95" selection-start-column="43" selection-end-line="95" selection-end-column="43" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/11.py" />
+    <entry file="file://$PROJECT_DIR$/dumpers/joint_dumper.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="18" column="50" lean-forward="false" selection-start-line="18" selection-start-column="50" selection-end-line="18" selection-end-column="50" />
+          <folding>
+            <element signature="e#0#18#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/utils/extmath.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="10" column="25" lean-forward="false" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="25" />
+        <state relative-caret-position="198">
+          <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="42" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/classifyFlow.py">
+    <entry file="file://$PROJECT_DIR$/utils/modules.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1980">
-          <caret line="95" column="43" lean-forward="false" selection-start-line="95" selection-start-column="43" selection-end-line="95" selection-end-column="43" />
+        <state relative-caret-position="210">
+          <caret line="176" column="0" lean-forward="false" selection-start-line="176" selection-start-column="0" selection-end-line="176" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#140#469#0" expanded="false" />
+            <element signature="e#166#454#0" expanded="false" />
+            <element signature="e#259#357#0" expanded="false" />
+            <element signature="e#369#438#0" expanded="false" />
+            <element signature="e#495#820#0" expanded="false" />
+            <element signature="e#495#553#1" expanded="false" />
+            <element signature="e#615#807#0" expanded="false" />
+            <element signature="e#634#807#0" expanded="false" />
+            <element signature="e#661#807#0" expanded="false" />
+            <element signature="e#713#807#0" expanded="false" />
+            <element signature="e#845#1666#0" expanded="false" />
+            <element signature="e#845#954#1" expanded="false" />
+            <element signature="e#1026#1259#0" expanded="false" />
+            <element signature="e#1083#1235#0" expanded="false" />
+            <element signature="e#1286#1341#0" expanded="false" />
+            <element signature="e#1467#1565#0" expanded="false" />
+            <element signature="e#1888#1893#0" expanded="false" />
+            <element signature="e#2806#2932#0" expanded="false" />
+            <element signature="e#5316#5695#0" expanded="false" />
+            <element signature="e#5316#5433#1" expanded="false" />
+            <element signature="e#5738#6481#0" expanded="false" />
+            <element signature="e#5738#5880#1" expanded="false" />
+            <element signature="e#6008#6040#0" expanded="false" />
+            <element signature="e#6543#9276#0" expanded="false" />
+            <element signature="e#6543#6713#1" expanded="false" />
+            <element signature="e#8516#8535#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dumpers/torso_dumper.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-17">
+          <caret line="41" column="0" lean-forward="true" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
@@ -627,64 +662,23 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/dumpers/accuracy_dumper.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="18" lean-forward="false" selection-start-line="0" selection-start-column="18" selection-end-line="0" selection-end-column="18" />
-          <folding />
+        <state relative-caret-position="484">
+          <caret line="22" column="77" lean-forward="true" selection-start-line="22" selection-start-column="77" selection-end-line="22" selection-end-column="77" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="616">
-          <caret line="41" column="54" lean-forward="false" selection-start-line="41" selection-start-column="54" selection-end-line="41" selection-end-column="54" />
+        <state relative-caret-position="562">
+          <caret line="176" column="0" lean-forward="true" selection-start-line="176" selection-start-column="0" selection-end-line="176" selection-end-column="0" />
           <folding>
             <element signature="e#0#38#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dumpers/joint_dumper.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="18" column="50" lean-forward="false" selection-start-line="18" selection-start-column="50" selection-end-line="18" selection-end-column="50" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/utils/modules.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1518">
-          <caret line="73" column="17" lean-forward="false" selection-start-line="73" selection-start-column="14" selection-end-line="73" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dumpers/torso_dumper.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="667">
-          <caret line="53" column="46" lean-forward="false" selection-start-line="53" selection-start-column="46" selection-end-line="53" selection-end-column="46" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-  </component>
-  <component name="masterDetails">
-    <states>
-      <state key="ScopeChooserConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-    </states>
   </component>
 </project>

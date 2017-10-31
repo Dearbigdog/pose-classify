@@ -27,7 +27,7 @@ for i in torsoIndices:
 joint_map_mean = joint_map - np.mean(joint_map, axis=0)
 # u,r,t=modules.get_torso_pca(joint_map)
 
-##
+
 def doPCA(joint_map_mean):
 	pca = PCA(n_components=2)
 	pca.fit(joint_map_mean)
@@ -59,8 +59,10 @@ for jj in joint_map:
 
 ax2=fig.add_subplot(1, 3, 2)
 plt.title('torso')
-for jj in transformedData:
-	ax2.scatter(jj[0], jj[1], color='r')
+for ii in transformedData:
+	ax2.scatter(ii[0], ii[1], color='r')
+	# ax2.scatter(firstPc[0]*ii[0],firstPc[1]*ii[0],firstPc[2]*ii[0],color='g')
+	# ax2.scatter(secondPc[0] * ii[1], secondPc[1] * ii[1], secondPc[2] * ii[1], color='c')
 
 ax3 = fig.add_subplot(1, 3, 3, projection='3d')
 for ii,jj in zip(transformedData,joint_map_mean):
