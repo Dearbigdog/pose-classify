@@ -98,7 +98,7 @@ shuffle_x = feature_full_x[shuffle_indices]
 shuffle_y = feature_full_y[shuffle_indices]
 shuffle_data = data_full_x[shuffle_indices]
 
-testing_size = 100
+testing_size = 200
 
 test_x = shuffle_x[0:testing_size]
 test_y = shuffle_y[0:testing_size]
@@ -119,8 +119,8 @@ print 'total training case number is {0}, total testing case is {1}'.format(len(
 print 'learning rate is {0}, mini batch size is {1}'.format(learning_rate, batch_size)
 
 # Network Parameters
-n_hidden_1 = 15  # 1st layer number of neurons
-n_hidden_2 = 6 # 2nd layer number of neurons
+n_hidden_1 = 16  # 1st layer number of neurons
+n_hidden_2 = 8 # 2nd layer number of neurons
 num_input = feature_dim  # data input
 num_classes = 2  # total classes
 
@@ -183,12 +183,16 @@ def batch_data(source, target, batch_size):
 
 
 # Start training
-
+iteration_times=100
 # mini batch generator
 statistics_accuracy = []
-for i in xrange(0, 100):
+statistics_false_pos=[]
+statistics_false_neg=[]
+#false positive & false negative
+for i in xrange(0, iteration_times):
 	batch_generator = batch_data(data_x, data_y, batch_size)
-
+	false_positive = 0
+	false_negative = 0
 	with tf.Session() as sess:
 		# Run the initializer
 		sess.run(init)
@@ -209,11 +213,19 @@ for i in xrange(0, 100):
 		# Calculate accuracy for MNIST test images
 		statistics_accuracy.append(100 * sess.run(accuracy, feed_dict={X: test_x,
 		                                                               Y: test_y}))
-		print("Testing Accuracy:", statistics_accuracy[i])
 
 		test_accuracy, test_correct_pred = sess.run([accuracy, correct_pred], feed_dict={X: test_x,
 		                                                                                 Y: test_y})
 
+		for p, q in zip(test_correct_pred, test_y):
+			if p== False and np.array_equal(q,[1,0]):
+				false_positive+=1
+			elif p== False and np.array_equal(q,[0,1]):
+				false_negative+=1
+		statistics_false_pos.append(false_positive/(1.0*testing_size)*100)
+		statistics_false_neg.append(false_negative/(1.0*testing_size)*100)
+
+		print("accuracy={0:.2f}%,false positive={1:.2f}%,false negative={2:.2f}%:".format(statistics_accuracy[i],statistics_false_pos[i],statistics_false_neg[i]))
 
 		# outfile = open('test_x_data.txt', 'ab')
 		# np.save(outfile, test_x_data)
@@ -232,8 +244,20 @@ for i in xrange(0, 100):
 		# outfile.close()
 #
 #
-statistics_file = 'statistics_accuracy_' + str(feature_dim) + '.txt'
-outfile = open(statistics_file, 'wb')
+accuracy_file = 'statistics_accuracy_' + str(feature_dim) + '.txt'
+outfile = open(accuracy_file, 'wb')
 np.save(outfile, statistics_accuracy)
 outfile.close()
-print 'average=', np.average(statistics_accuracy)
+print 'accuracy average=', np.average(statistics_accuracy)
+
+false_positive_file = 'statistics_false_pos_' + str(feature_dim) + '.txt'
+outfile = open(false_positive_file, 'wb')
+np.save(outfile, statistics_false_pos)
+outfile.close()
+print 'false positive average=', np.average(statistics_false_pos)
+
+false_negative_file = 'statistics_false_neg_' + str(feature_dim) + '.txt'
+outfile = open(false_negative_file, 'wb')
+np.save(outfile, statistics_false_neg)
+outfile.close()
+print 'false negative average=', np.average(statistics_false_neg)
