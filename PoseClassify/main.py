@@ -69,19 +69,24 @@ def gen_feature_file(features_file, data_file, source_file):
 		# print features.shape
 	return features, data_x
 
+#pass the source folder, distinguish by pos and neg
 
-case = 'chest'
+source_file_pos=["/home/richard/20171117/pos_hug","/home/richard/20171117/pos_cross"]
+source_file_neg=["/home/richard/20171117/neg_hug","/home/richard/20171117/neg_bend","/home/richard/20171117/neg_lean","/home/richard/20171117/neg_whatever"]
 
-feature_pos_file = 'f_' + case + '_pos.txt'
-data_pos_file = 'data_' + case + '_pos.txt'
-data_pos_files = './kinect_data/' + case + '/pos'
+feature_pos_hug='pos_hug.txt'
+feature_neg_hug='neg_hug.txt'
+feature_pos_cross='pos_cross.txt'
+feature_neg_cross='neg_cross.txt'
 
-feature_neg_file = 'f_' + case + '_neg.txt'
-data_neg_file = 'data_' + case + '_neg.txt'
-data_neg_files = './kinect_data/' + case + '/neg'
+data_pos_hug='pos_hug_data.txt'
+data_neg_hug='neg_hug_data.txt'
+data_pos_cross='pos_cross_data.txt'
+data_neg_cross='neg_cross_data.txt'
 
-feature_pos, data_pos = gen_feature_file(feature_pos_file, data_pos_file, data_pos_files)
-feature_neg, data_neg = gen_feature_file(feature_neg_file, data_neg_file, data_neg_files)
+
+feature_pos, data_pos = gen_feature_file(feature_pos_hug, data_pos_hug, source_file_pos)
+feature_neg, data_neg = gen_feature_file(feature_neg_hug, data_neg_hug, source_file_neg)
 
 # create the y data
 y_pos = np.array([[1, 0] for i in range(feature_pos.shape[0])])
@@ -98,7 +103,7 @@ shuffle_x = feature_full_x[shuffle_indices]
 shuffle_y = feature_full_y[shuffle_indices]
 shuffle_data = data_full_x[shuffle_indices]
 
-testing_size = 200
+testing_size = 100
 
 test_x = shuffle_x[0:testing_size]
 test_y = shuffle_y[0:testing_size]
@@ -113,7 +118,7 @@ data_y = shuffle_y[testing_size + 1:-1]
 learning_rate = 0.03
 # num_steps = 100  #not use any more
 batch_size = 30
-display_step = 10
+display_step = 1
 
 print 'total training case number is {0}, total testing case is {1}'.format(len(data_x), len(test_x))
 print 'learning rate is {0}, mini batch size is {1}'.format(learning_rate, batch_size)
@@ -183,7 +188,7 @@ def batch_data(source, target, batch_size):
 
 
 # Start training
-iteration_times=100
+iteration_times=300
 # mini batch generator
 statistics_accuracy = []
 statistics_false_pos=[]
