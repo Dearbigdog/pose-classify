@@ -20,7 +20,7 @@ generate the features and store them instead of calculate every time
 feature_dim = 43
 
 
-def gen_feature_file(features_file, data_file, source_file):
+def gen_feature_file(features_file,names_file, data_file, source_file):
 	'''
 	:param features_file: the extracted feature files
 	:param source_file: original data input
@@ -32,7 +32,7 @@ def gen_feature_file(features_file, data_file, source_file):
 	if not os.path.exists(features_file):
 		# load pos data and convert them to theta and phi
 		print 'loading... path=', source_file
-		pos_data = modules.load_data(source_file)
+		pos_data,pos_name = modules.load_data(source_file)
 		data_x, torsos = modules.get_torso(pos_data)
 
 		for i in range(0, torsos.shape[0]):
@@ -51,10 +51,13 @@ def gen_feature_file(features_file, data_file, source_file):
 		print features.shape
 		outfile = open(features_file, 'ab')
 		outdata = open(data_file, 'ab')
+		outname=open(names_file,'ab')
 		np.save(outfile, features)
 		outfile.close()
 		np.save(outdata, data_x)
 		outdata.close()
+		np.save(outname, pos_name)
+		outname.close()
 		print 'finished...'
 	else:
 		print 'loading features...', features_file
@@ -66,18 +69,24 @@ def gen_feature_file(features_file, data_file, source_file):
 		outdata = open(data_file, 'rb')
 		data_x = np.load(outdata)
 		outdata.close()
+
+		print 'loading name...', names_file
+		outdata = open(names_file, 'rb')
+		pos_name = np.load(outdata)
+		outdata.close()
 		# print features.shape
-	return features, data_x
+	return features, data_x , pos_name
 
 #pass the source folder, distinguish by pos and neg
 
 source_file_pos=["/home/richard/20171117/pos_hug","/home/richard/20171117/pos_cross"]
 source_file_neg=["/home/richard/20171117/neg_hug","/home/richard/20171117/neg_bend","/home/richard/20171117/neg_lean","/home/richard/20171117/neg_whatever"]
 
-feature_pos_hug='pos_hug.txt'
-feature_neg_hug='neg_hug.txt'
-feature_pos_cross='pos_cross.txt'
-feature_neg_cross='neg_cross.txt'
+feature_pos='pos_hug.txt'
+feature_neg='neg_hug.txt'
+
+filename_pos='pos_hug_name.txt'
+filename_neg='neg_hug_name.txt'
 
 data_pos_hug='pos_hug_data.txt'
 data_neg_hug='neg_hug_data.txt'
@@ -85,14 +94,17 @@ data_pos_cross='pos_cross_data.txt'
 data_neg_cross='neg_cross_data.txt'
 
 
-feature_pos, data_pos = gen_feature_file(feature_pos_hug, data_pos_hug, source_file_pos)
-feature_neg, data_neg = gen_feature_file(feature_neg_hug, data_neg_hug, source_file_neg)
+
+
+feature_pos, data_pos,path_pos = gen_feature_file(feature_pos, filename_pos,data_pos_hug, source_file_pos)
+feature_neg, data_neg,path_neg = gen_feature_file(feature_neg, filename_neg,data_neg_hug, source_file_neg)
 
 # create the y data
 y_pos = np.array([[1, 0] for i in range(feature_pos.shape[0])])
 y_neg = np.array([[0, 1] for j in range(feature_neg.shape[0])])
 
 data_full_x = np.concatenate((data_pos, data_neg), axis=0)
+path_full_x=np.concatenate((path_pos,path_neg),axis=0)
 feature_full_x = np.concatenate((feature_pos, feature_neg), axis=0)
 feature_full_x = feature_full_x[:, 0:feature_dim]
 feature_full_y = np.concatenate((y_pos, y_neg), axis=0)
@@ -102,6 +114,7 @@ shuffle_indices = np.random.permutation(np.arange(len(feature_full_x)))
 shuffle_x = feature_full_x[shuffle_indices]
 shuffle_y = feature_full_y[shuffle_indices]
 shuffle_data = data_full_x[shuffle_indices]
+shuffle_path=path_full_x[shuffle_indices]
 
 testing_size = 100
 
@@ -110,6 +123,7 @@ test_y = shuffle_y[0:testing_size]
 
 # in order to trace the original inputs
 test_x_data = shuffle_data[0:testing_size]
+test_x_path=shuffle_path[0:testing_size]
 
 data_x = shuffle_x[testing_size + 1:-1]
 data_y = shuffle_y[testing_size + 1:-1]
@@ -188,7 +202,7 @@ def batch_data(source, target, batch_size):
 
 
 # Start training
-iteration_times=300
+iteration_times=100
 # mini batch generator
 statistics_accuracy = []
 statistics_false_pos=[]
@@ -219,7 +233,7 @@ for i in xrange(0, iteration_times):
 		statistics_accuracy.append(100 * sess.run(accuracy, feed_dict={X: test_x,
 		                                                               Y: test_y}))
 
-		test_accuracy, test_correct_pred = sess.run([accuracy, correct_pred], feed_dict={X: test_x,
+		test_accuracy, test_correct_pred,test_logits = sess.run([accuracy, correct_pred,logits], feed_dict={X: test_x,
 		                                                                                 Y: test_y})
 
 		for p, q in zip(test_correct_pred, test_y):
@@ -232,10 +246,16 @@ for i in xrange(0, iteration_times):
 
 		print("accuracy={0:.2f}%,false positive={1:.2f}%,false negative={2:.2f}%:".format(statistics_accuracy[i],statistics_false_pos[i],statistics_false_neg[i]))
 
+		#original data
 		# outfile = open('test_x_data.txt', 'ab')
 		# np.save(outfile, test_x_data)
 		# outfile.close()
 		#
+		# outfile = open('test_x_path.txt', 'ab')
+		# np.save(outfile, test_x_path)
+		# outfile.close()
+		#
+		# # 43 features
 		# outfile = open('test_x.txt', 'ab')
 		# np.save(outfile, test_x)
 		# outfile.close()
@@ -247,22 +267,26 @@ for i in xrange(0, iteration_times):
 		# outfile = open('test_correct_pred.txt', 'ab')
 		# np.save(outfile, test_correct_pred)
 		# outfile.close()
+		#
+		# outfile = open('test_logits.txt', 'ab')
+		# np.save(outfile, test_logits)
+		# outfile.close()
 #
+
+# accuracy_file = 'statistics_accuracy_' + str(feature_dim) + '.txt'
+# outfile = open(accuracy_file, 'wb')
+# np.save(outfile, statistics_accuracy)
+# outfile.close()
+# print 'accuracy average=', np.average(statistics_accuracy)
 #
-accuracy_file = 'statistics_accuracy_' + str(feature_dim) + '.txt'
-outfile = open(accuracy_file, 'wb')
-np.save(outfile, statistics_accuracy)
-outfile.close()
-print 'accuracy average=', np.average(statistics_accuracy)
-
-false_positive_file = 'statistics_false_pos_' + str(feature_dim) + '.txt'
-outfile = open(false_positive_file, 'wb')
-np.save(outfile, statistics_false_pos)
-outfile.close()
-print 'false positive average=', np.average(statistics_false_pos)
-
-false_negative_file = 'statistics_false_neg_' + str(feature_dim) + '.txt'
-outfile = open(false_negative_file, 'wb')
-np.save(outfile, statistics_false_neg)
-outfile.close()
-print 'false negative average=', np.average(statistics_false_neg)
+# false_positive_file = 'statistics_false_pos_' + str(feature_dim) + '.txt'
+# outfile = open(false_positive_file, 'wb')
+# np.save(outfile, statistics_false_pos)
+# outfile.close()
+# print 'false positive average=', np.average(statistics_false_pos)
+#
+# false_negative_file = 'statistics_false_neg_' + str(feature_dim) + '.txt'
+# outfile = open(false_negative_file, 'wb')
+# np.save(outfile, statistics_false_neg)
+# outfile.close()
+# print 'false negative average=', np.average(statistics_false_neg)

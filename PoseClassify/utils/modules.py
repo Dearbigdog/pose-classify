@@ -27,16 +27,18 @@ def load_data(fpath):
 	:return:
 	'''
 	data = []
+	name = []
 	l=len(fpath)
 	for p in fpath:
 		for dirpath, subdirs, files in os.walk(p):
 			for x in files:
 				if x.endswith('.txt'):
+					name.append(p + '/' + x)
 					with open(os.path.join(dirpath, x), 'r') as f:
 						for line in f.readlines():
 							data.append(line.replace('\n', '').split(' '))
 						f.close()
-	return data
+	return data,name
 
 
 def get_torso(data):
