@@ -14,8 +14,8 @@ def timeit(method):
 			name = kw.get('log_name', method.__name__.upper())
 			kw['log_time'][name] = int((te - ts) * 1000)
 		else:
-			print '%r  %2.2f ms' % \
-			      (method.__name__, (te - ts) * 1000)
+			print('%r  %2.2f ms' % \
+			      (method.__name__, (te - ts) * 1000))
 		return result
 
 	return timed
@@ -27,18 +27,18 @@ def load_data(fpath):
 	:return:
 	'''
 	data = []
-	name = []
+	#name = []
 	l=len(fpath)
 	for p in fpath:
 		for dirpath, subdirs, files in os.walk(p):
 			for x in files:
 				if x.endswith('.txt'):
-					name.append(p + '/' + x)
+					#name.append(p + '/' + x)
 					with open(os.path.join(dirpath, x), 'r') as f:
 						for line in f.readlines():
 							data.append(line.replace('\n', '').split(' '))
 						f.close()
-	return data,name
+	return data
 
 
 def get_torso(data):
@@ -46,12 +46,12 @@ def get_torso(data):
 	:param data: n sets of skeleton data (25 points per set)
 	:return: 25 points data set. torso matrix
 	'''
-	dataNum = len(data) / 25
+	dataNum = int(len(data) / 25)
 	dataX = []
 
-	for j in xrange(0, dataNum):
+	for j in range(0, dataNum):
 		dataSet = np.zeros((25, 3))
-		for i in xrange(0, 25):
+		for i in range(0, 25):
 			# data[0][1][2:-1]
 			dataSet[i] = np.array(
 				[float(data[i + j * 25][1][2:-1]), float(data[i + j * 25][2][2:-1]), float(data[i + j * 25][3][2:-1])])
@@ -128,9 +128,11 @@ def export_distance_features(pose_set):
 def get_vector_angles(v,u,r):
 	vu_theta=utils.extmath.vector_angle(v,u)
 	vr_theta=utils.extmath.vector_angle(v,r)
-	if vu_theta<90:
-		vr_theta=360-vr_theta
-	return vr_theta
+	#if vu_theta>90 and vr_theta>90:
+	#	vr_theta=360-vr_theta
+	#if vu_theta>=90 and vr_theta<=90:
+	#	vr_theta=-vr_theta
+	return vr_theta ,vu_theta
 
 def export_angle_features_2d(pose_set):
 	'''
@@ -162,10 +164,7 @@ def export_angle_features_2d(pose_set):
 	f_angle_2d.append(get_vector_angles(pose_set_2d[10]-pose_set_2d[1],unit_n1,unit_n2))
 	f_angle_2d.append(get_vector_angles(pose_set_2d[16]-pose_set_2d[1],unit_n1,unit_n2))
 	f_angle_2d.append(get_vector_angles(pose_set_2d[12]-pose_set_2d[1],unit_n1,unit_n2))
-	f_angle_2d.append(get_vector_angles(pose_set_2d[17]-pose_set_2d[1],unit_n1,unit_n2))
-	f_angle_2d.append(get_vector_angles(pose_set_2d[13]-pose_set_2d[1],unit_n1,unit_n2))
-	f_angle_2d.append(get_vector_angles(pose_set_2d[18]-pose_set_2d[1],unit_n1,unit_n2))
-	f_angle_2d.append(get_vector_angles(pose_set_2d[14]-pose_set_2d[1],unit_n1,unit_n2))
+
 
 	# fig = plt.figure(figsize=plt.figaspect(0.5))
 	# ax = fig.add_subplot(1, 2, 1, projection='3d')
@@ -195,9 +194,12 @@ def gen_first_theta_phi(x, u, r, t):
 	#get the angle between proj and t
 	proj_t_angle=utils.extmath.vector_angle(proj,t)
 	phi = utils.extmath.vector_angle(proj, r)
-	if proj_t_angle>90:
-		phi=360-phi
-	return theta, phi
+	#if proj_t_angle>90:
+	#	if phi<90:
+	#		phi=-phi
+	#	if phi>=90:
+	#		phi=360-phi
+	return theta, phi,proj_t_angle
 
 def gen_second_theta_phi(x,y, u, r, t):
 	'''
@@ -214,18 +216,21 @@ def gen_second_theta_phi(x,y, u, r, t):
 	proj_t = utils.extmath.plane_proj(t, x)
 
 	#make proj_r & proj_t orthogonal
-	# proj_r_norm=[i/np.linalg.norm(proj_r) for i in proj_r]
-	# rt_cofficient=np.dot(proj_t, proj_r_norm) / np.dot(proj_r_norm, proj_r_norm)
-	# proj_t_norm=proj_t-np.dot(rt_cofficient,proj_r_norm)
+	proj_r_norm=[i/np.linalg.norm(proj_r) for i in proj_r]
+	rt_cofficient=np.dot(proj_t, proj_r_norm) / np.dot(proj_r_norm, proj_r_norm)
+	proj_t_norm=proj_t-np.dot(rt_cofficient,proj_r_norm)
 
 	# print np.dot(proj_r_norm,proj_t_norm)
 	proj_y = utils.extmath.plane_proj(y, x)
 	proj_t_angle = utils.extmath.vector_angle(proj_t, proj_y)
 	phi = utils.extmath.vector_angle(proj_r, proj_y)
 
-	if proj_t_angle>90:
-		phi=360-phi
-	return theta, phi
+	#if proj_t_angle>90:
+	#	if phi<90:
+	#		phi=-phi
+	#	if phi>=90:
+	#		phi=360-phi
+	return theta, phi, proj_t_angle
 
 # @timeit
 def export_angle_features_3d(pose_set, u, r, t):
@@ -246,23 +251,23 @@ def export_angle_features_3d(pose_set, u, r, t):
 	spine_upper = pose_set[20] - pose_set[1]
 	spine_lower = pose_set[0] - pose_set[1]
 
-	shoudler_theta_l, shoulder_phi_l = gen_first_theta_phi(shoudler_left, u, r, t)
-	ff.append([shoudler_theta_l, shoulder_phi_l])
+	shoudler_theta_l, shoulder_phi_l,proj_angle= gen_first_theta_phi(shoudler_left, u, r, t)
+	ff.append([shoudler_theta_l, shoulder_phi_l,proj_angle])
 
-	shoudler_theta_r, shoulder_phi_r = gen_first_theta_phi(shoudler_right, u, r, t)
-	ff.append([shoudler_theta_r, shoulder_phi_r])
+	shoudler_theta_r, shoulder_phi_r,proj_angle = gen_first_theta_phi(shoudler_right, u, r, t)
+	ff.append([shoudler_theta_r, shoulder_phi_r,proj_angle])
 
-	hip_theta_l, hip_phi_l = gen_first_theta_phi(hip_left, u, r, t)
-	ff.append([hip_theta_l, hip_phi_l])
+	hip_theta_l, hip_phi_l ,proj_angle= gen_first_theta_phi(hip_left, u, r, t)
+	ff.append([hip_theta_l, hip_phi_l,proj_angle])
 
-	hip_theta_r, hip_phi_r = gen_first_theta_phi(hip_right, u, r, t)
-	ff.append([hip_theta_r, hip_phi_r])
+	hip_theta_r, hip_phi_r,proj_angle = gen_first_theta_phi(hip_right, u, r, t)
+	ff.append([hip_theta_r, hip_phi_r,proj_angle])
 
-	spine_theta_u, spine_phi_u = gen_first_theta_phi(spine_upper, u, r, t)
-	ff.append([spine_theta_u, spine_phi_u])
+	spine_theta_u, spine_phi_u,proj_angle = gen_first_theta_phi(spine_upper, u, r, t)
+	ff.append([spine_theta_u, spine_phi_u,proj_angle])
 
-	spine_theta_l, spine_phi_l = gen_first_theta_phi(spine_lower, u, r, t)
-	ff.append([spine_theta_l, spine_phi_l])
+	spine_theta_l, spine_phi_l,proj_angle = gen_first_theta_phi(spine_lower, u, r, t)
+	ff.append([spine_theta_l, spine_phi_l,proj_angle])
 
 	# first degree joints 12-21
 	elbow_left = pose_set[5] - pose_set[4]
@@ -272,22 +277,24 @@ def export_angle_features_3d(pose_set, u, r, t):
 	neck = pose_set[2] - pose_set[20]
 
 	# elbow left & right
-	elbow_theta_l, elbow_phi_l = gen_first_theta_phi(elbow_left, u, r, t)
-	ff.append([elbow_theta_l, elbow_phi_l])
+	elbow_theta_l, elbow_phi_l ,proj_angle= gen_first_theta_phi(elbow_left, u, r, t)
+	ff.append([elbow_theta_l, elbow_phi_l,proj_angle])
 
-	elbow_theta_r, elbow_phi_r = gen_first_theta_phi(elbow_right, u, r, t)
-	ff.append([elbow_theta_r, elbow_phi_r])
+	elbow_theta_r, elbow_phi_r,proj_angle = gen_first_theta_phi(elbow_right, u, r, t)
+	ff.append([elbow_theta_r, elbow_phi_r,proj_angle])
 
-	# knee left & right
-	knee_theta_l, knee_phi_l = gen_first_theta_phi(knee_left, u, r, t)
-	ff.append([knee_theta_l, knee_phi_l])
 
-	knee_theta_r, knee_phi_r = gen_first_theta_phi(knee_right, u, r, t)
-	ff.append([knee_theta_r, knee_phi_r])
+	## knee left & right
+	#knee_theta_l, knee_phi_l = gen_first_theta_phi(knee_left, u, r, t)
+	#ff.append([knee_theta_l, knee_phi_l])
+
+	#knee_theta_r, knee_phi_r = gen_first_theta_phi(knee_right, u, r, t)
+	#ff.append([knee_theta_r, knee_phi_r])
 
 	# neck
-	neck_theta, neck_phi = gen_first_theta_phi(neck, u, r, t)
-	ff.append([neck_theta, neck_phi])
+	neck_theta, neck_phi,proj_angle = gen_first_theta_phi(neck, u, r, t)
+	ff.append([neck_theta, neck_phi,proj_angle])
+
 
 	# print 'ff=\n', ff
 
@@ -298,18 +305,18 @@ def export_angle_features_3d(pose_set, u, r, t):
 	ankle_right = pose_set[18] - pose_set[17]
 
 	# hand left & right
-	hand_theta_l, hPhiL=gen_second_theta_phi(elbow_left,hand_left,u,r,t)
-	ff.append([hand_theta_l, hPhiL])
+	hand_theta_l, hand_phi_l,proj_angle=gen_second_theta_phi(elbow_left,hand_left,u,r,t)
+	ff.append([hand_theta_l, hand_phi_l,proj_angle])
 
-	hand_theta_r, hand_phi_r = gen_second_theta_phi(elbow_right, hand_right,u,r,t)
-	ff.append([hand_theta_r, hand_phi_r])
+	hand_theta_r, hand_phi_r,proj_angle = gen_second_theta_phi(elbow_right, hand_right,u,r,t)
+	ff.append([hand_theta_r, hand_phi_r,proj_angle])
 
-	# ankle left & right
-	ankle_theta_l ,ankle_phi_l=gen_second_theta_phi(knee_left, ankle_left,u,r,t)
-	ff.append([ankle_theta_l, ankle_phi_l])
+	## ankle left & right
+	#ankle_theta_l ,ankle_phi_l=gen_second_theta_phi(knee_left, ankle_left,u,r,t)
+	#ff.append([ankle_theta_l, ankle_phi_l])
 
-	ankle_theta_r, ankle_phi_r = gen_second_theta_phi(knee_right, ankle_right,u,r,t)
-	ff.append([ankle_theta_r, ankle_phi_r])
+	#ankle_theta_r, ankle_phi_r = gen_second_theta_phi(knee_right, ankle_right,u,r,t)
+	#ff.append([ankle_theta_r, ankle_phi_r])
 
 	# print 'sf=\n', sf
 	return ff

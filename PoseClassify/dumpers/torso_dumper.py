@@ -4,16 +4,16 @@ from mpl_toolkits.mplot3d import Axes3D
 import utils.modules as modules
 from sklearn.decomposition import PCA
 
-test_x = np.load('../test_x.txt')
-test_y = np.load('../test_y.txt')
+test_x = np.load('.\\test_x.txt')
+test_y = np.load('.\\test_y.txt')
 test_y_rename=[]
 for y in test_y:
 	if y[0]==1:
 		test_y_rename.append(True)
 	else:
 		test_y_rename.append(False)
-test_x_data = np.load('../test_x_data.txt')
-test_correct_pred = np.load('../test_correct_pred.txt')
+test_x_data = np.load('.\\test_x_data.txt')
+test_correct_pred = np.load('.\\test_correct_pred.txt')
 
 # get torso 7 points
 torsoIndices = [8, 20, 4, 1, 16, 0, 12]
@@ -33,15 +33,15 @@ def doPCA(joint_map_mean):
 	pca.fit(joint_map_mean)
 	return pca
 pca = doPCA(joint_map_mean)
-print pca.explained_variance_ratio_
+print(pca.explained_variance_ratio_)
 firstPc = pca.components_[0]
 secondPc = pca.components_[1]
 
-print 'first pc=', firstPc
-print 'second pc=', secondPc
+print('first pc=', firstPc)
+print('second pc=', secondPc)
 
 transformedData = pca.transform(joint_map_mean)
-print 'transformed data shape=', transformedData.shape
+print('transformed data shape=', transformedData.shape)
 
 
 
