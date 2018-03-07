@@ -101,8 +101,8 @@ feature_pos_hug, data_pos_hug = gen_feature_file('feature_pos_hug.txt','pos_data
 feature_neg, data_neg = gen_feature_file('feature_neg.txt', 'neg_data.txt', source_file_neg)
 
 # create the y data
-y_pos_akimbo = np.array([[1, 0] for i in range(feature_pos_akimbo.shape[0])])
-y_pos_hug = np.array([[0, 1] for i in range(feature_pos_hug.shape[0])])
+y_pos_akimbo = np.array([[0, 1] for i in range(feature_pos_akimbo.shape[0])])
+y_pos_hug = np.array([[1, 0] for i in range(feature_pos_hug.shape[0])])
 y_neg = np.array([[0, 1] for j in range(feature_neg.shape[0])])
 
 data_full_x = np.concatenate((data_pos_akimbo,data_pos_hug, data_neg), axis=0)
@@ -137,7 +137,7 @@ batch_size = 20
 display_step = 1
 
 # Start training
-iteration_times = 200
+iteration_times = 1
 
 print('total training case number is {0}, total testing case is {1}'.format(len(data_x), len(test_x)))
 print('learning rate is {0}, mini batch size is {1}'.format(learning_rate, batch_size))
@@ -236,7 +236,7 @@ for i in range(0, iteration_times):
 				loss, acc = sess.run([loss_op, accuracy], feed_dict={X: batch_x, Y: batch_y})
 				#print("Step " + str(step) + ", Minibatch Loss= " +"{:.4f}".format(loss) + ", Training Accuracy= " +"{:.3f}".format(acc))
 		#print("Optimization Finished!")
-		save_path = saver.save(sess,".\\pose_model.ckpt")
+		save_path = saver.save(sess,".\\pose_model_hug.ckpt")
 		#print("tensorflow persistence done at : %s" % save_path)
 		# Calculate accuracy
 		statistics_accuracy.append(100 * sess.run(accuracy, feed_dict={X: test_x,

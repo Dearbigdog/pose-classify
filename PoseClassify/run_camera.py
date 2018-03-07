@@ -123,7 +123,7 @@ class BodyGameRuntime(object):
         del address
         target_surface.unlock()
 
-    def run(self,para,avg_feature_akimbo,avg_feature_hug):
+    def run(self,general_para,hug_para,akimbo_para,avg_feature_akimbo,avg_feature_hug):
         # -------- Main Program Loop -----------
         while not self._done:
             # --- Main event loop
@@ -160,17 +160,22 @@ class BodyGameRuntime(object):
                     for j in range(0,24):
                          list_x.append([joints[j].Position.x,joints[j].Position.y,joints[j].Position.z])
                     array_x=np.array(list_x)
-                    f_combine,out_layer=rm.neural_network_classify(array_x,para)
-                    res=""
+                    f_combine,out_layer=rm.neural_network_classify(array_x,general_para)
+					# suggested by dexter 
+                    #f_combine,out_layer=ah.test_two_way(array_x,hug_para,akimbo_para)
+
                     is_correct=False
                     if (np.argmax(out_layer)==0):
-                        res="Correct {0:.2f}__{1:.2f}, probability:{2:.2f}%".format(out_layer[0],out_layer[1],100*(out_layer[0]-out_layer[1])/np.float(np.abs(out_layer[1])))
                         is_correct=True
-                        print("Correct! logits=%s",out_layer)
+                    else:
+                        is_correct=False
+                    res=""
+                    if (is_correct==True):
+                        res="Correct {0:.2f}__{1:.2f}, probability:{2:.2f}%".format(out_layer[0],out_layer[1],100*(out_layer[0]-out_layer[1])/np.float(np.abs(out_layer[1])))
+                        #print("Correct! logits=%s",out_layer)
                     else:
                         res="Incorrect {0:.2f}__{1:.2f},probability:{2:.2f}%".format(out_layer[0],out_layer[1],100*(out_layer[1]-out_layer[0])/np.float(np.abs(out_layer[0])))
-                        is_correct=False
-                        print("Incorrect :(  logits=%s",out_layer)
+                        #print("Incorrect :(  logits=%s",out_layer)
                     # convert joint coordinates to color space 
                     joint_points = self._kinect.body_joints_to_color_space(joints)
                     self.draw_body(joints, joint_points, SKELETON_COLORS[i])
@@ -213,9 +218,11 @@ class BodyGameRuntime(object):
 
 __main__ = "Kinect v2 Body Game"
 game = BodyGameRuntime()
-para=rm.restore_parameters()
+general_para=rm.restore_parameters('.\\pose_model.ckpt.meta')
+hug_para=rm.restore_parameters('.\\pose_model_hug.ckpt.meta')
+akimbo_para=rm.restore_parameters('.\\pose_model_akimbo.ckpt.meta')
 avg_feature_akimbo,avg_feature_hug=ah.get_feature_avg()
-print(para)
-game.run(para,avg_feature_akimbo,avg_feature_hug);
+#print(general_para)
+game.run(general_para,hug_para,akimbo_para,avg_feature_akimbo,avg_feature_hug);
 
 

@@ -25,7 +25,7 @@ def neural_network_classify(x,para):
 	out_layer = np.matmul(layer_2, para[2]) + para[5]
 	return f_combine,out_layer
 
-def restore_parameters():
+def restore_parameters(para_name):
 	# Network Parameters
 	n_hidden_1 = 12  # 1st layer number of neurons
 	n_hidden_2 = 6 # 2nd layer number of neurons
@@ -43,24 +43,22 @@ def restore_parameters():
 
 	# Add ops to save and restore all the variables.
 	saver = tf.train.Saver()
-
+	para=[]
 	# Later, launch the model, use the saver to restore variables from disk, and
 	# do some work with the model.
-	sess=tf.Session()
+	with tf.Session() as sess:
+		saver = tf.train.import_meta_graph(para_name)
+		saver.restore(sess,tf.train.latest_checkpoint('.\\'))
+		#saver.restore(sess, ".\\pose_model.ckpt")
+		print("Model restored.")
+		print(sess.run('h1:0'))
 
-	saver = tf.train.import_meta_graph('.\\pose_model.ckpt.meta')
-	saver.restore(sess,tf.train.latest_checkpoint('.\\'))
-
-	#saver.restore(sess, ".\\pose_model.ckpt")
-	print("Model restored.")
-	print(sess.run('h1:0'))
-
-	#print("b1 : %s" % sess.run(b1))
-	para=[]
-	para.append(sess.run('h1:0'))
-	para.append(sess.run('h2:0'))
-	para.append(sess.run('h3:0'))
-	para.append(sess.run('b1:0'))
-	para.append(sess.run('b2:0'))
-	para.append(sess.run('b3:0'))
+		#print("b1 : %s" % sess.run(b1))
+		para.append(sess.run('h1:0'))
+		para.append(sess.run('h2:0'))
+		para.append(sess.run('h3:0'))
+		para.append(sess.run('b1:0'))
+		para.append(sess.run('b2:0'))
+		para.append(sess.run('b3:0'))
+	tf.reset_default_graph()
 	return para
